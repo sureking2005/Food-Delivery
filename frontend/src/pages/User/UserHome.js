@@ -1,15 +1,11 @@
 import React from 'react';
-import pizzaImage from '../foodimages/pizza.jpg';
-import burgerImage from '../foodimages/burger.jpg';
-import sushiImage from '../foodimages/sushi.jpg';
-import pastaImage from '../foodimages/pasta.jpg';
 
 const foodItems = [
-  { id: 1, name: 'Pizza', price: 10, image: pizzaImage },
-  { id: 2, name: 'Burger', price: 8, image: burgerImage },
-  { id: 3, name: 'Sushi', price: 12, image: sushiImage },
-  { id: 4, name: 'Pasta', price: 9, image: pastaImage },
-];
+    { id: 1, name: 'Pizza', price: 10, image: '/foodimages/pizza.jpg' },
+    { id: 2, name: 'Burger', price: 8, image: '/foodimages/burger.jpg' },
+    { id: 3, name: 'Sushi', price: 12, image: '/foodimages/sushi.jpg' },
+    { id: 4, name: 'Pasta', price: 9, image: '/foodimages/pasta.jpg' },
+  ];
 
 function UserHome() {
     return (
