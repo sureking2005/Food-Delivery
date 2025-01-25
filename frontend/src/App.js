@@ -1,19 +1,31 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import Role  from './pages/Role';
 import UserGuest from './pages/UserGuest';
-import DeliveryboyLogin from './pages/Deliveryboy/DeliveryboyLogin';
+import UserLogin from './pages/User/UserLogin';
+import UserSignup from './pages/User/UserSignup';
 import UserHome from './pages/User/UserHome';
+
+
+
+import DeliveryboyLogin from './pages/Deliveryboy/DeliveryboyLogin';
+import DeliveryboySignup from './pages/Deliveryboy/DeliveryboySignup';
+
+
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Role/>}/>
-        <Route path="/userguest" element={<UserGuest/>}/>
+        <Route path="/" element={<UserGuest/>}/>
         <Route path="/deliveryboylogin" element={<DeliveryboyLogin/>}/>
+        <Route path="/deliveryboysignup" element={<DeliveryboySignup/>}/>
+
+
+        <Route path="/userlogin" element={<UserLogin/>}/>
+        <Route path="/usersignup" element={<UserSignup/>}/>
         <Route path="/userhome" element={<UserHome/>}/>
+
 
 
       </Routes>
