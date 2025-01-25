@@ -19,7 +19,7 @@ const UserLogin = () => {
     };
 
     const handleforgot = () => {
-        navigate('/forgotpage');
+        navigate('/userforgot');
     };
 
     return (
