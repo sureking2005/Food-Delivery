@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 const foodItems = [
     { id: 1, name: 'Pizza', price: 10, image: '/foodimages/pizza.jpg' },
     { id: 2, name: 'Burger', price: 8, image: '/foodimages/burger.jpg' },

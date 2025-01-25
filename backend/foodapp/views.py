@@ -39,14 +39,15 @@ def send_otp_email(email, otp):
         return False
 
 @csrf_exempt
-def verify_email(request):
+def user_verify_email(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
             email = data.get('email')
 
             existing_user = db.users_signupdetail.find_one({'email': email})
-            if existing_user:
+
+            if existing_user :
                 return JsonResponse({'alert': 'Email already exists'}, status=400)
 
             otp = str(random.randint(100000, 999999))
@@ -56,6 +57,185 @@ def verify_email(request):
                 return JsonResponse({'message': 'OTP Sent'}, status=200)
             else:
                 return JsonResponse({'message': 'Failed to send OTP'}, status=500)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
+    return JsonResponse({'message': 'Invalid request method'}, status=405)
+
+@csrf_exempt
+def user_verify_forgot_email(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            email = data.get('email')
+
+            existing_user = db.users_signupdetail.find_one({'email': email})
+
+            if existing_user :
+
+                otp = str(random.randint(100000, 999999))
+                otp_storage[email] = otp
+
+            else:
+                return JsonResponse({'alert': 'Email doesnt exist ,signup '}, status=400)
+
+
+            if send_otp_email(email, otp):
+                return JsonResponse({'message': 'OTP Sent'}, status=200)
+            else:
+                return JsonResponse({'message': 'Failed to send OTP'}, status=500)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
+    return JsonResponse({'message': 'Invalid request method'}, status=405)
+
+
+
+@csrf_exempt
+def user_verify_otp(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            email = data.get('email')
+            otp = data.get('otp')
+
+            # Verify OTP
+            stored_otp = otp_storage.get(email)
+            if stored_otp != otp:
+                return JsonResponse({'alert': 'Invalid OTP'}, status=400)
+
+            # Clear OTP after verification
+            del otp_storage[email]
+
+            return JsonResponse({'message': 'OTP Verified'}, status=200)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
+    return JsonResponse({'message': 'Invalid request method'}, status=405)
+
+@csrf_exempt
+def user_reset(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            email = data.get('email')
+            new_password = data.get('newPassword')
+
+            # Update password in database
+            result = db.users_signupdetail.update_one(
+                {'email': email},
+                {'$set': {'password': new_password}}
+            )
+
+            if result.modified_count > 0:
+                return JsonResponse({'message': 'Password Reset Successful'}, status=200)
+            else:
+                return JsonResponse({'message': 'User not found'}, status=400)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
+    return JsonResponse({'message': 'Invalid request method'}, status=405)
+
+@csrf_exempt
+def deliveryboy_verify_email(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            email = data.get('email')
+
+            existing_user = db.deliveryboy_signupdetail.find_one({'email': email})
+
+            if existing_user :
+                return JsonResponse({'alert': 'Email already exists'}, status=400)
+
+            otp = str(random.randint(100000, 999999))
+            otp_storage[email] = otp
+
+            if send_otp_email(email, otp):
+                return JsonResponse({'message': 'OTP Sent'}, status=200)
+            else:
+                return JsonResponse({'message': 'Failed to send OTP'}, status=500)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
+    return JsonResponse({'message': 'Invalid request method'}, status=405)
+
+@csrf_exempt
+def deliveryboy_verify_forgot_email(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            email = data.get('email')
+
+            existing_user = db.deliveryboy_signupdetail.find_one({'email': email})
+
+            if existing_user :
+
+                otp = str(random.randint(100000, 999999))
+                otp_storage[email] = otp
+
+            else:
+                return JsonResponse({'alert': 'Email doesnt exist ,signup '}, status=400)
+
+
+            if send_otp_email(email, otp):
+                return JsonResponse({'message': 'OTP Sent'}, status=200)
+            else:
+                return JsonResponse({'message': 'Failed to send OTP'}, status=500)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
+    return JsonResponse({'message': 'Invalid request method'}, status=405)
+
+
+
+@csrf_exempt
+def deliveryboy_verify_otp(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            email = data.get('email')
+            otp = data.get('otp')
+
+            # Verify OTP
+            stored_otp = otp_storage.get(email)
+            if stored_otp != otp:
+                return JsonResponse({'alert': 'Invalid OTP'}, status=400)
+
+            # Clear OTP after verification
+            del otp_storage[email]
+
+            return JsonResponse({'message': 'OTP Verified'}, status=200)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
+    return JsonResponse({'message': 'Invalid request method'}, status=405)
+
+@csrf_exempt
+def deliveryboy_reset(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            email = data.get('email')
+            new_password = data.get('newPassword')
+
+            # Update password in database
+            result = db.deliveryboy_signupdetail.update_one(
+                {'email': email},
+                {'$set': {'password': new_password}}
+            )
+
+            if result.modified_count > 0:
+                return JsonResponse({'message': 'Password Reset Successful'}, status=200)
+            else:
+                return JsonResponse({'message': 'User not found'}, status=400)
 
         except json.JSONDecodeError:
             return JsonResponse({'message': 'Invalid JSON'}, status=400)
@@ -127,14 +307,17 @@ def user_login(request):
 def deliveryboy_signup(request):
     if request.method == 'POST':
         try:
-            data = json.loads(request.body.decode('utf-8'))    
-
-            Required_fields = [ 'email','phonenumber', 'password']
-
+            data = json.loads(request.body.decode('utf-8'))
+            
+            Required_fields = ['email', 'phonenumber', 'password', 'otp']
             for field in Required_fields:
                 if field not in data:
                     return JsonResponse({'error': f'{field} is required'}, status=400)
-                
+
+            stored_otp = otp_storage.get(data['email'])
+            if stored_otp != data['otp']:
+                return JsonResponse({'alert': 'Invalid OTP'}, status=400)
+
             existing_user = db.deliveryboy_signupdetail.find_one({'email': data['email']})
             if existing_user:
                 return JsonResponse({'alert': 'Email already exists'}, status=400)
@@ -142,15 +325,17 @@ def deliveryboy_signup(request):
             user = db.deliveryboy_signupdetail.insert_one({
                 'email': data['email'],
                 'phonenumber': data['phonenumber'],
-                'password': data['password']  
-            }) 
+                'password': data['password']
+            })
+
+            del otp_storage[data['email']]
 
             return JsonResponse({'message': 'Signup Successful'}, status=200)
-            
+
         except json.JSONDecodeError:
             return JsonResponse({'message': 'Invalid JSON'}, status=400)
-        
-    return JsonResponse({'message': 'Invalid request method'}, status=405)   
+
+    return JsonResponse({'message': 'Invalid request method'}, status=405) 
 
 
 @csrf_exempt
