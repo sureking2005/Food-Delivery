@@ -5,9 +5,11 @@ import { useNavigate } from 'react-router-dom';
 const UserSignup = () => {
     const [formData, setFormData] = useState({
         email: '',
-        phonenumber:'',
-        password: ''
+        phonenumber: '',
+        password: '',
+        otp: ''
     });
+    const [emailVerified, setEmailVerified] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -18,6 +20,22 @@ const UserSignup = () => {
         }));
     };
 
+    const verifyEmail = async () => {
+        try {
+            const response = await axios.post('http://localhost:8000/verifyemail/', { 
+                email: formData.email 
+            });
+            
+            if (response.data.message === 'OTP Sent') {
+                alert('OTP sent to your email');
+                setEmailVerified(true);
+            }
+        } catch (error) {
+            console.error('Email verification error:', error);
+            alert('Failed to send OTP');
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -26,7 +44,7 @@ const UserSignup = () => {
                     'Content-Type': 'application/json',
                 }
             });
-            
+
             if (response.data.message === 'Signup Successful') {
                 alert('Signup Successful');
                 navigate('/userlogin');
@@ -38,39 +56,56 @@ const UserSignup = () => {
     };
 
     return (
-        <div className='usersignup'>
+        <div>
             <h1>User Signup</h1>
             <form onSubmit={handleSubmit}>
-                <div className='signup-column'>
-                    <input 
-                        type="email" 
+                <div>
+                    <input
+                        type="email"
                         name="email"
-                        placeholder="Enter Email" 
+                        placeholder="Enter Email"
                         value={formData.email}
                         onChange={handleChange}
-                        required 
+                        required
                     />
-                    <input 
-                        type="phonenumber" 
+                    <button type="button" onClick={verifyEmail}>
+                        Verify Email
+                    </button>
+
+                    {emailVerified && (
+                        <input
+                            type="text"
+                            name="otp"
+                            placeholder="Enter OTP"
+                            value={formData.otp}
+                            onChange={handleChange}
+                            required
+                        />
+                    )}
+
+                    <input
+                        type="text"
                         name="phonenumber"
-                        placeholder="Enter Phonenumber" 
-                        value={formData.name}
+                        placeholder="Enter Phone Number"
+                        value={formData.phonenumber}
                         onChange={handleChange}
-                        required 
+                        required
                     />
-                    <input 
-                        type="password" 
+
+                    <input
+                        type="password"
                         name="password"
-                        placeholder="Enter Password" 
+                        placeholder="Enter Password"
                         value={formData.password}
                         onChange={handleChange}
-                        required 
+                        required
                     />
+
                     <button type="submit">Sign Up</button>
                 </div>
             </form>
         </div>
     );
-}
+};
 
 export default UserSignup;

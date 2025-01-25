@@ -18,6 +18,10 @@ const UserLogin = () => {
         navigate('/usersignup');
     };
 
+    const handleforgot = () => {
+        navigate('/forgotpage');
+    };
+
     return (
         <div className='userlogin'>
             <h1>User Login</h1>
@@ -43,6 +47,11 @@ const UserLogin = () => {
             <div className='signup-link'>
                 <p>Don't have an account? 
                     <button onClick={handleSignup}>Sign Up</button>
+                </p>
+            </div>
+            <div className='forgot-link'>
+                <p>Forgot your password? 
+                    <button onClick={handleforgot}>Forgot password</button>
                 </p>
             </div>
         </div>
