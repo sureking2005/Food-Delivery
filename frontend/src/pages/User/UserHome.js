@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import pizzaImage from '../foodimages/pizza.jpg';
 import burgerImage from '../foodimages/burger.jpg';
 import sushiImage from '../foodimages/sushi.jpg';
@@ -41,4 +40,3 @@ function UserHome() {
   }
   
   export default UserHome;
-  
