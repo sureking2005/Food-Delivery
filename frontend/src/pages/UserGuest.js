@@ -20,7 +20,8 @@ const UserGuest = () => {
         <button onClick={handleDeliveryLogin}>Deliveryboy Login/Signup</button>
 
       </nav>
-      Guest
+      
+      
     </div>
   );
 };
