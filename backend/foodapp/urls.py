@@ -18,5 +18,8 @@ urlpatterns=[
     path('deliveryboyverifyforgotemail/',views.deliveryboy_verify_forgot_email,name='deliveryboy_verify_forgot_email'),
     path('deliveryboyverifyotp/',views.deliveryboy_verify_otp,name='deliveryboy_verify_otp'),
 
+    path('addcart/',views.add_to_cart,name='add_to_cart'),
+
+
 
 ]

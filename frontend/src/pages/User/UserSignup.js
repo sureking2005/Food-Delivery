@@ -10,7 +10,19 @@ const UserSignup = () => {
         otp: ''
     });
     const [emailVerified, setEmailVerified] = useState(false);
+    const [passwordError, setPasswordError] = useState('');
+    const [phoneError, setPhoneError] = useState('');
     const navigate = useNavigate();
+
+    const validatePassword = (password) => {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+        return passwordRegex.test(password);
+    };
+
+    const validatePhoneNumber = (phone) => {
+        const phoneRegex = /^\d{10}$/;
+        return phoneRegex.test(phone);
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -18,40 +30,85 @@ const UserSignup = () => {
             ...prevState,
             [name]: value
         }));
+
+        // Real-time password validation
+        if (name === 'password') {
+            if (!validatePassword(value)) {
+                setPasswordError('Password must be 6 characters with lowercase, uppercase, and numbers');
+            } else {
+                setPasswordError('');
+            }
+        }
+
+        // Real-time phone number validation
+        if (name === 'phonenumber') {
+            if (!validatePhoneNumber(value)) {
+                setPhoneError('Phone number must be exactly 10 digits');
+            } else {
+                setPhoneError('');
+            }
+        }
     };
 
     const verifyEmail = async () => {
         try {
-            const response = await axios.post('http://localhost:8000/userverifyemail/', { 
-                email: formData.email 
+            const response = await axios.post('http://localhost:8000/userverifyemail/', {
+                email: formData.email
             });
-            
+    
             if (response.data.message === 'OTP Sent') {
                 alert('OTP sent to your email');
                 setEmailVerified(true);
+            } else if (response.data.alert === 'Email already exists') {
+                alert('Email already exists. Please use a different email.');
             }
         } catch (error) {
             console.error('Email verification error:', error);
-            alert('Failed to send OTP');
+            if (error.response && error.response.data.alert) {
+                alert(error.response.data.alert);
+            } else {
+                alert('Failed to send OTP');
+            }
         }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!emailVerified) {
+            alert('Please verify your email first');
+            return;
+        }
+
+        if (!validatePassword(formData.password)) {
+            setPasswordError('Invalid password format');
+            return;
+        }
+
+        if (!validatePhoneNumber(formData.phonenumber)) {
+            setPhoneError('Phone number must be exactly 10 digits');
+            return;
+        }
+
         try {
             const response = await axios.post('http://localhost:8000/usersignup/', formData, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
             });
-
+    
             if (response.data.message === 'Signup Successful') {
                 alert('Signup Successful');
                 navigate('/userlogin');
             }
         } catch (error) {
             console.error('Signup error:', error.response ? error.response.data : error.message);
-            alert('User already exists');
+            
+            if (error.response && error.response.data.alert) {
+                alert(error.response.data.alert);
+            } else {
+                alert('Signup failed');
+            }
         }
     };
 
@@ -84,13 +141,14 @@ const UserSignup = () => {
                     )}
 
                     <input
-                        type="text"
+                        type="tel"
                         name="phonenumber"
                         placeholder="Enter Phone Number"
                         value={formData.phonenumber}
                         onChange={handleChange}
                         required
                     />
+                    {phoneError && <p style={{color: 'red'}}>{phoneError}</p>}
 
                     <input
                         type="password"
@@ -100,8 +158,9 @@ const UserSignup = () => {
                         onChange={handleChange}
                         required
                     />
+                    {passwordError && <p style={{color: 'red'}}>{passwordError}</p>}
 
-                    <button type="submit">Sign Up</button>
+                    <button type="submit" disabled={!!passwordError || !!phoneError}>Sign Up</button>
                 </div>
             </form>
         </div>
