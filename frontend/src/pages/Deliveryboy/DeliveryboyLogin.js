@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
 
-const UDeliveryboyLogin = () => {
+const DeliveryboyLogin = () => {
     const [primary_key, setPrimary_key] = useState('');
 
     const [password, setPassword] = useState('');

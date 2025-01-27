@@ -22,6 +22,12 @@ import DeliveryboyHome from './pages/Deliveryboy/DeliveryboyHome';
 import DeliveryboyForgot from './pages/Deliveryboy/DeliveryboyForgot';
 import DeliveryboyReset from './pages/Deliveryboy/DeliveryboyReset';
 
+import OwnerLogin from './pages/Owner/OwnerLogin';
+import OwnerSignup from './pages/Owner/OwnerSignup';
+import OwnerHome from './pages/Owner/OwnerHome';
+import OwnerForgot from './pages/Owner/OwnerForgot';
+import OwnerReset from './pages/Owner/OwnerReset';
+
 
 
 
@@ -51,6 +57,11 @@ function App() {
         <Route path="/adminforgot" element={<AdminForgot/>}/>
         <Route path="/adminreset" element={<AdminReset/>}/>
 
+        <Route path="/ownerlogin" element={<OwnerLogin/>}/>
+        <Route path="/ownersignup" element={<OwnerSignup/>}/>
+        <Route path="/ownerhome" element={<OwnerHome/>}/>
+        <Route path="/ownerforgot" element={<OwnerForgot/>}/>
+        <Route path="/ownerreset" element={<OwnerReset/>}/>
 
 
 
