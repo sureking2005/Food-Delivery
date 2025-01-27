@@ -52,7 +52,7 @@ const DeliveryboySignup = () => {
 
     const verifyEmail = async () => {
         try {
-            const response = await axios.post('http://localhost:8000/eliveryboyverifyemail/', {
+            const response = await axios.post('http://localhost:8000/deliveryboyverifyemail/', {
                 email: formData.email
             });
     
