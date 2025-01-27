@@ -45,9 +45,9 @@ const OwnerLogin = () => {
     };
 
     return (
-        <div className='userlogin'>
+        <div className='ownerlogin'>
             <div className='login-card'>
-            <h1>User Login</h1>
+            <h1>Owner Login</h1>
             {error && <div className="error-message text-red-500">{error}</div>}
             <form onSubmit={handleLogin}>
                 <div className='login-column'>
@@ -81,7 +81,7 @@ const OwnerLogin = () => {
             </div>
             </div>
             <style>{`
-                .userlogin {
+                .ownerlogin {
                     display: flex;
                     justify-content: center;
                     align-items: center;
@@ -90,7 +90,7 @@ const OwnerLogin = () => {
                     font-family: 'Arial', sans-serif;
                 }
 
-                .userlogin .login-card {
+                .ownerlogin .login-card {
                     background: white;
                     border-radius: 15px;
                     box-shadow: 0 15px 35px rgba(0,0,0,0.1);
@@ -99,19 +99,19 @@ const OwnerLogin = () => {
                     text-align: center;
                 }
 
-                .userlogin h1 {
+                .ownerlogin h1 {
                     color: #333;
                     margin-bottom: 30px;
                     font-size: 28px;
                 }
 
-                .userlogin .login-column {
+                .ownerlogin .login-column {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                 }
 
-                .userlogin input {
+                .ownerlogin input {
                     width: 100%;
                     padding: 14px;
                     margin-bottom: 20px;
@@ -120,13 +120,13 @@ const OwnerLogin = () => {
                     transition: all 0.3s ease;
                 }
 
-                .userlogin input:focus {
+                .ownerlogin input:focus {
                     outline: none;
                     border-color: #667eea;
                     box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
                 }
 
-                .userlogin button {
+                .ownerlogin button {
                     width: 100%;
                     padding: 14px;
                     background: linear-gradient(to right, #667eea, #764ba2);
@@ -138,7 +138,7 @@ const OwnerLogin = () => {
                     margin-bottom: 20px;
                 }
 
-                .userlogin button:hover {
+                .ownerlogin button:hover {
                     transform: scale(1.05);
                 }
 
@@ -151,11 +151,11 @@ const OwnerLogin = () => {
                     text-decoration: underline;
                 }
 
-                .userlogin .signup-link {
+                .ownerlogin .signup-link {
                     margin-top: 15px;
                 }
 
-                .userlogin .signup-link button {
+                .ownerlogin .signup-link button {
                     background: none;
                     border: none;
                     color: #667eea;

@@ -116,7 +116,7 @@ const OwnerSignup = () => {
     return (
             <div className="signup-container">
             <div className="signup-form">
-            <h1>User Signup</h1>
+            <h1>Owner Signup</h1>
             <form onSubmit={handleSubmit}>
                 <div>
                     <input
