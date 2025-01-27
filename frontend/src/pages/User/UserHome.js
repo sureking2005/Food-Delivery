@@ -6,7 +6,7 @@ const foodItems = [
     { id: 2, name: 'Burger', price: 8, image: '/foodimages/burger.jpg' },
     { id: 3, name: 'Sushi', price: 12, image: '/foodimages/sushi.jpg' },
     { id: 4, name: 'Pasta', price: 9, image: '/foodimages/pasta.jpg' },
-];
+  ];
 
 function UserHome() {
     const [email, setEmail] = useState('');

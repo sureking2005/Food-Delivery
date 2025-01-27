@@ -200,30 +200,39 @@ def user_login(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
-            email_or_phone = data.get('email')
+            primary_key = data.get('primary_key')
             password = data.get('password')
 
-            existing_user = (
-                db.users_signupdetail.find_one({'email': email_or_phone}) or 
-                db.users_signupdetail.find_one({'phonenumber': email_or_phone})
-            )
+            existing_user = db.users_signupdetail.find_one({'email': primary_key})
+            existing_user_1 =  db.users_signupdetail.find_one({'phonenumber': primary_key})
             
-            if email_or_phone not in login_attempts:
-                login_attempts[email_or_phone] = {'count': 0, 'timestamp': datetime.now()}
             
-            if login_attempts[email_or_phone]['count'] >= 5:
+            if (primary_key) not in login_attempts:
+                login_attempts[primary_key] = {'count': 0, 'timestamp': datetime.now()}
+            
+            if login_attempts[primary_key]['count'] >= 5:
                 return JsonResponse({'error': 'Account locked. Try again later.'}, status=403)
 
             if existing_user:
                 if bcrypt.checkpw(password.encode('utf-8'), existing_user['password'].encode('utf-8')):
-                    login_attempts[email_or_phone] = {'count': 0, 'timestamp': datetime.now()}
+                    login_attempts[primary_key] = {'count': 0, 'timestamp': datetime.now()}
+                    
+                    return JsonResponse({'message': 'Login Successfully'}, status=200)
+                else:
+                    login_attempts[primary_key]['count'] += 1
+                    return JsonResponse({'error': 'Invalid credentials'}, status=400)
+                
+            elif existing_user_1:
+                if bcrypt.checkpw(password.encode('utf-8'), existing_user_1['password'].encode('utf-8')):
+                    login_attempts[primary_key] = {'count': 0, 'timestamp': datetime.now()}
                     
    
                     
                     return JsonResponse({'message': 'Login Successfully'}, status=200)
                 else:
-                    login_attempts[email_or_phone]['count'] += 1
+                    login_attempts[primary_key]['count'] += 1
                     return JsonResponse({'error': 'Invalid credentials'}, status=400)
+    
             else:
                 return JsonResponse({'error': 'User not found'}, status=404)
 
