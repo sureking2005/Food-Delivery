@@ -159,7 +159,7 @@ def user_signup(request):
             phonenumber = data.get('phonenumber')
 
             
-            Required_fields = ['email', 'phonenumber', 'password', 'otp']
+            Required_fields = ['email', 'phonenumber', 'password', 'otp','role']
             for field in Required_fields:
                 if field not in data:
                     return JsonResponse({'error': f'{field} is required'}, status=400)
@@ -218,8 +218,7 @@ def user_login(request):
                 if bcrypt.checkpw(password.encode('utf-8'), existing_user['password'].encode('utf-8')):
                     login_attempts[email_or_phone] = {'count': 0, 'timestamp': datetime.now()}
                     
-                    # Log successful login (you'd typically use a logging framework)
-                    print(f"Successful login for {email_or_phone}")
+   
                     
                     return JsonResponse({'message': 'Login Successfully'}, status=200)
                 else:

@@ -7,7 +7,8 @@ const UserSignup = () => {
         email: '',
         phonenumber: '',
         password: '',
-        otp: ''
+        otp: '',
+
     });
     const [emailVerified, setEmailVerified] = useState(false);
     const [passwordError, setPasswordError] = useState('');
@@ -99,7 +100,7 @@ const UserSignup = () => {
     
             if (response.data.message === 'Signup Successful') {
                 alert('Signup Successful');
-                navigate('/userlogin');
+                navigate('/userhome');
             }
         } catch (error) {
             console.error('Signup error:', error.response ? error.response.data : error.message);

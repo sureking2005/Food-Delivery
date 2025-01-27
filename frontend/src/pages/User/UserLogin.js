@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Make sure to install axios: npm install axios
+import axios from 'axios'; 
 
 const UserLogin = () => {
     const [email, setEmail] = useState('');
@@ -10,7 +10,7 @@ const UserLogin = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        setError(''); // Reset any previous errors
+        setError(''); 
 
         try {
             const response = await axios.post('http://localhost:8000/userlogin/', {
@@ -18,22 +18,17 @@ const UserLogin = () => {
                 password: password
             });
 
-            // If login is successful
             if (response.status === 200) {
                 console.log('Login successful', response.data);
                 alert('Login Successful');
                 navigate('/userhome');
             }
         } catch (err) {
-            // Handle login errors
             if (err.response) {
-                // The request was made and the server responded with a status code
                 setError(err.response.data.error || 'Login failed');
             } else if (err.request) {
-                // The request was made but no response was received
                 setError('No response from server');
             } else {
-                // Something happened in setting up the request
                 setError('Error logging in');
             }
             console.error('Login error:', err);
@@ -50,13 +45,13 @@ const UserLogin = () => {
 
     return (
         <div className='userlogin'>
-            <h1>User Logins</h1>
+            <h1>User Login</h1>
             {error && <div className="error-message text-red-500">{error}</div>}
             <form onSubmit={handleLogin}>
                 <div className='login-column'>
                     <input
-                        type="email"
-                        placeholder="Enter Email"
+                        type="text"
+                        placeholder="Enter Email/Phone Number"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
@@ -81,6 +76,7 @@ const UserLogin = () => {
                     <button onClick={handleforgot}>Forgot password</button>
                 </p>
             </div>
+            
             
         </div>
     );
