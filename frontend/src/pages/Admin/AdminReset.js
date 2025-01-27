@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-const UserReset = () => {
+const AdminReset = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [passwords, setPasswords] = useState({
@@ -33,14 +33,14 @@ const UserReset = () => {
         }
     
         try {
-            const response = await axios.post('http://localhost:8000/userreset/', {
+            const response = await axios.post('http://localhost:8000/adminreset/', {
                 email: location.state?.email,
                 newPassword: passwords.newPassword
             });
     
             if (response.data.message === 'Password Reset Successful') {
                 alert('Password reset successful');
-                navigate('/userlogin');
+                navigate('/adminlogin');
             }
         } catch (error) {
             alert(error.response?.data?.message || 'Password reset failed');
@@ -140,4 +140,4 @@ const UserReset = () => {
     );
 };
 
-export default UserReset;
+export default AdminReset;

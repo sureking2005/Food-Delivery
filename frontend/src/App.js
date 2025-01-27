@@ -9,7 +9,11 @@ import UserForgot from './pages/User/UserForgot';
 import UserReset from './pages/User/UserReset';
 import UserCart from './pages/User/UserCart';
 
-
+import AdminLogin from './pages/Admin/AdminLogin';
+import AdminSignup from './pages/Admin/AdminSignup';
+import AdminHome from './pages/Admin/AdminHome';
+import AdminForgot from './pages/Admin/AdminForgot';
+import AdminReset from './pages/Admin/AdminReset';
 
 
 import DeliveryboyLogin from './pages/Deliveryboy/DeliveryboyLogin';
@@ -39,6 +43,13 @@ function App() {
         <Route path="/userforgot" element={<UserForgot/>}/>
         <Route path="/userreset" element={<UserReset/>}/>
         <Route path="/usercart" element={<UserCart/>}/>
+
+
+        <Route path="/adminlogin" element={<AdminLogin/>}/>
+        <Route path="/adminsignup" element={<AdminSignup/>}/>
+        <Route path="/adminhome" element={<AdminHome/>}/>
+        <Route path="/adminforgot" element={<AdminForgot/>}/>
+        <Route path="/adminreset" element={<AdminReset/>}/>
 
 
 
