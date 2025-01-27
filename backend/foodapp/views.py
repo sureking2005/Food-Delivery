@@ -167,6 +167,7 @@ def user_signup(request):
             existing_phone = db.users_signupdetail.find_one({'phonenumber': phonenumber})
             if existing_phone:
                 return JsonResponse({'alert': 'Phonenumber already exists'}, status=400)
+            
 
             stored_otp = otp_storage.get(data['email'])
             if stored_otp != data['otp']:
