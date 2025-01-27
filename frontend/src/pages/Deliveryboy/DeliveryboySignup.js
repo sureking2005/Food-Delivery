@@ -7,10 +7,23 @@ const DeliveryboySignup = () => {
         email: '',
         phonenumber: '',
         password: '',
-        otp: ''
+        otp: '',
+
     });
     const [emailVerified, setEmailVerified] = useState(false);
+    const [passwordError, setPasswordError] = useState('');
+    const [phoneError, setPhoneError] = useState('');
     const navigate = useNavigate();
+
+    const validatePassword = (password) => {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+        return passwordRegex.test(password);
+    };
+
+    const validatePhoneNumber = (phone) => {
+        const phoneRegex = /^\d{10}$/;
+        return phoneRegex.test(phone);
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -18,94 +31,142 @@ const DeliveryboySignup = () => {
             ...prevState,
             [name]: value
         }));
+
+        if (name === 'password') {
+            if (!validatePassword(value)) {
+                setPasswordError('Password must be 6 characters with lowercase, uppercase, and numbers');
+            } else {
+                setPasswordError('');
+            }
+        }
+
+        // Real-time phone number validation
+        if (name === 'phonenumber') {
+            if (!validatePhoneNumber(value)) {
+                setPhoneError('Phone number must be exactly 10 digits');
+            } else {
+                setPhoneError('');
+            }
+        }
     };
 
     const verifyEmail = async () => {
         try {
-            const response = await axios.post('http://localhost:8000/deliveryboyverifyemail/', { 
-                email: formData.email 
+            const response = await axios.post('http://localhost:8000/eliveryboyverifyemail/', {
+                email: formData.email
             });
-            
+    
             if (response.data.message === 'OTP Sent') {
                 alert('OTP sent to your email');
                 setEmailVerified(true);
+            } else if (response.data.alert === 'Email already exists') {
+                alert('Email already exists. Please use a different email.');
             }
         } catch (error) {
             console.error('Email verification error:', error);
-            alert('Failed to send OTP');
+            if (error.response && error.response.data.alert) {
+                alert(error.response.data.alert);
+            } else {
+                alert('Failed to send OTP');
+            }
         }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!emailVerified) {
+            alert('Please verify your email first');
+            return;
+        }
+
+        if (!validatePassword(formData.password)) {
+            setPasswordError('Invalid password format');
+            return;
+        }
+
+        if (!validatePhoneNumber(formData.phonenumber)) {
+            setPhoneError('Phone number must be exactly 10 digits');
+            return;
+        }
+
         try {
             const response = await axios.post('http://localhost:8000/deliveryboysignup/', formData, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
             });
-
+    
             if (response.data.message === 'Signup Successful') {
                 alert('Signup Successful');
-                navigate('/deliveryboylogin');
+                navigate('/deliveryboyhome');
             }
         } catch (error) {
             console.error('Signup error:', error.response ? error.response.data : error.message);
-            alert('email already exists');
+            
+            if (error.response && error.response.data.alert) {
+                alert(error.response.data.alert);
+            } else {
+                alert('Signup failed');
+            }
         }
     };
 
     return (
-        <div className="signup-container">
+            <div className="signup-container">
             <div className="signup-form">
-                <h1>Deliveryboy Signup</h1>
-                <form onSubmit={handleSubmit}>
-                    <div>
-                        <input
-                            type="email"
-                            name="email"
-                            placeholder="Enter Email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                        />
-                        <button type="button" className="verify-button" onClick={verifyEmail}>
-                            Verify Email
-                        </button>
+            <h1>Deliveryboy Signup</h1>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter Email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                    />
+                    <button type="button" onClick={verifyEmail}>
+                        Verify Email
+                    </button>
 
-                        {emailVerified && (
-                            <input
-                                type="text"
-                                name="otp"
-                                placeholder="Enter OTP"
-                                value={formData.otp}
-                                onChange={handleChange}
-                                required
-                            />
-                        )}
-
+                    {emailVerified && (
                         <input
                             type="text"
-                            name="phonenumber"
-                            placeholder="Enter Phone Number"
-                            value={formData.phonenumber}
+                            name="otp"
+                            placeholder="Enter OTP"
+                            value={formData.otp}
                             onChange={handleChange}
                             required
                         />
+                    )}
 
-                        <input
-                            type="password"
-                            name="password"
-                            placeholder="Enter Password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                        />
+                    <input
+                        type="tel"
+                        name="phonenumber"
+                        placeholder="Enter Phone Number"
+                        value={formData.phonenumber}
+                        onChange={handleChange}
+                        required
+                    />
+                    {phoneError && <p style={{color: 'red'}}>{phoneError}</p>}
 
-                        <button type="submit">Sign Up</button>
-                    </div>
-                </form>
-            </div>
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter Password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required
+                    />
+                    {passwordError && <p style={{color: 'red'}}>{passwordError}</p>}
+
+                    <button type="submit" disabled={!!passwordError || !!phoneError}>Sign Up</button>
+                </div>
+
+            </form>
+        </div>
+            <div>
             <style>{`
                 .signup-container {
                     display: flex;
@@ -167,6 +228,7 @@ const DeliveryboySignup = () => {
                     width: auto;
                 }
             `}</style>
+            </div>
         </div>
     );
 };

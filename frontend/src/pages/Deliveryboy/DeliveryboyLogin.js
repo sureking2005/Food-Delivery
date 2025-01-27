@@ -1,15 +1,39 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'; 
 
-const DeliveryboyLogin = () => {
-    const [email, setEmail] = useState('');
+const UDeliveryboyLogin = () => {
+    const [primary_key, setPrimary_key] = useState('');
+
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        navigate('/deliveryboyhome');
-        console.log('Login attempted', { email, password });
+        setError(''); 
+
+        try {
+            const response = await axios.post('http://localhost:8000/deliveryboylogin/', {
+                primary_key: primary_key ,
+                password: password
+            });
+
+            if (response.status === 200) {
+                console.log('Login successful', response.data);
+                alert('Login Successful');
+                navigate('/deliveryboyhome');
+            }
+        } catch (err) {
+            if (err.response) {
+                setError(err.response.data.error || 'Login failed');
+            } else if (err.request) {
+                setError('No response from server');
+            } else {
+                setError('Error logging in');
+            }
+            console.error('Login error:', err);
+        }
     };
 
     const handleSignup = () => {
@@ -23,37 +47,39 @@ const DeliveryboyLogin = () => {
     return (
         <div className='deliveryboylogin'>
             <div className='login-card'>
-                <h1>Deliveryboy Login</h1>
-                <form onSubmit={handleLogin}>
-                    <div className='login-column'>
-                        <input 
-                            type="email" 
-                            placeholder="Enter Email" 
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required 
-                        />
-                        <input 
-                            type="password" 
-                            placeholder="Enter Password" 
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required 
-                        />
-                        <button type="submit">Login</button>
-
-                        <div className='forgot-link'>
-                            <button type="button" onClick={handleforgot}>Forgot Password?</button>
-                        </div>
-                    </div>
-                </form>
-                <div className='signup-link'>
-                    <p>Don't have an account? 
-                        <button onClick={handleSignup}>Sign Up</button>
-                    </p>
+            <h1>Deliveryboy Login</h1>
+            {error && <div className="error-message text-red-500">{error}</div>}
+            <form onSubmit={handleLogin}>
+                <div className='login-column'>
+                    <input 
+                        type="text" 
+                        placeholder="Enter Email/Phone Number" 
+                        value={primary_key}
+                        onChange={(e) => setPrimary_key(e.target.value)}
+                        required 
+                    />
+                    <input 
+                        type="password" 
+                        placeholder="Enter Password" 
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required 
+                    />
+                    <button type="submit">Login</button>
                 </div>
+                
+            </form>
+            <div className='signup-link'>
+                <p>Don't have an account? 
+                    <button onClick={handleSignup}>Sign Up</button>
+                </p>
             </div>
-
+            <div className='forgot-link'>
+                <p>Forgot your password? 
+                    <button onClick={handleforgot}>Forgot password</button>
+                </p>
+            </div>
+            </div>
             <style>{`
                 .deliveryboylogin {
                     display: flex;
@@ -79,7 +105,7 @@ const DeliveryboyLogin = () => {
                     font-size: 28px;
                 }
 
-                .deliveryboylogin .login-column {
+                .Deliveryboylogin .login-column {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
@@ -143,4 +169,3 @@ const DeliveryboyLogin = () => {
 }
 
 export default DeliveryboyLogin;
-

@@ -22,7 +22,7 @@ const DeliveryboyForgot = () => {
 
     const handleVerifyOtp = async () => {
         try {
-            const response = await axios.post('http://localhost:8000/userverifyotp/', { 
+            const response = await axios.post('http://localhost:8000/deliveryboyverifyotp/', { 
                 email, 
                 otp 
             });
