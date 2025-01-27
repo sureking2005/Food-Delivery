@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -11,7 +10,7 @@ from email.mime.text import MIMEText
 import random
 import bcrypt
 from datetime import datetime, timedelta
-
+from bson import ObjectId
 
 client=MongoClient('mongodb+srv://kavinkavin8466:1234@fooddelivery.i05g3.mongodb.net/?retryWrites=true&w=majority&appName=fooddelivery')
 db = client['fooddelivery']
@@ -855,3 +854,4 @@ def add_to_cart(request):
 
         except json.JSONDecodeError:
             return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
