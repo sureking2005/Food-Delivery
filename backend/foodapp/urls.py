@@ -20,8 +20,11 @@ urlpatterns=[
     
     path('forgot-password/send-otp/', views.user_verify_forgot_email, name='send_otp'),
     path('forgot-password/verify-otp/', views.user_verify_otp, name='verify_otp'),
-    path('forgot-password/reset/', views.user_reset, name='reset_password')
+    path('forgot-password/reset/', views.user_reset, name='reset_password'),
     
+
+    path('addcart/',views.add_to_cart,name='add_to_cart'),
+
 
 
 ]

@@ -7,6 +7,8 @@ import UserSignup from './pages/User/UserSignup';
 import UserHome from './pages/User/UserHome';
 import UserForgot from './pages/User/UserForgot';
 import UserReset from './pages/User/UserReset';
+import UserCart from './pages/User/UserCart';
+
 
 
 
@@ -15,6 +17,7 @@ import DeliveryboySignup from './pages/Deliveryboy/DeliveryboySignup';
 import DeliveryboyHome from './pages/Deliveryboy/DeliveryboyHome';
 import DeliveryboyForgot from './pages/Deliveryboy/DeliveryboyForgot';
 import DeliveryboyReset from './pages/Deliveryboy/DeliveryboyReset';
+
 
 
 
@@ -35,6 +38,8 @@ function App() {
         <Route path="/userhome" element={<UserHome/>}/>
         <Route path="/userforgot" element={<UserForgot/>}/>
         <Route path="/userreset" element={<UserReset/>}/>
+        <Route path="/usercart" element={<UserCart/>}/>
+
 
 
 
