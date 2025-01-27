@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.shortcuts import render
+
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -9,10 +9,13 @@ import base64
 import smtplib
 from email.mime.text import MIMEText
 import random
+import time
+from email.mime.multipart import MIMEMultipart
+import bcrypt
 
 
-client=MongoClient('mongodb://localhost:27017/')
-db = client['Swiggy']
+client=MongoClient('mongodb+srv://kavinkavin8466:1234@fooddelivery.i05g3.mongodb.net/?retryWrites=true&w=majority&appName=fooddelivery')
+db = client['fooddelivery']
 
 
 SMTP_SERVER = 'smtp.gmail.com'
@@ -63,6 +66,7 @@ def user_verify_email(request):
 
     return JsonResponse({'message': 'Invalid request method'}, status=405)
 
+
 @csrf_exempt
 def user_verify_forgot_email(request):
     if request.method == 'POST':
@@ -72,14 +76,16 @@ def user_verify_forgot_email(request):
 
             existing_user = db.users_signupdetail.find_one({'email': email})
 
-            if existing_user :
-
+            if existing_user:
                 otp = str(random.randint(100000, 999999))
-                otp_storage[email] = otp
+                
+                otp_storage[email] = {
+                    'otp': otp,
+                    'timestamp': time.time()
+                }
 
             else:
-                return JsonResponse({'alert': 'Email doesnt exist ,signup '}, status=400)
-
+                return JsonResponse({'alert': 'Email doesnt exist, signup'}, status=400)
 
             if send_otp_email(email, otp):
                 return JsonResponse({'message': 'OTP Sent'}, status=200)
@@ -91,30 +97,60 @@ def user_verify_forgot_email(request):
 
     return JsonResponse({'message': 'Invalid request method'}, status=405)
 
-
-
 @csrf_exempt
 def user_verify_otp(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
             email = data.get('email')
-            otp = data.get('otp')
+            user_otp = data.get('otp')
 
-            # Verify OTP
-            stored_otp = otp_storage.get(email)
-            if stored_otp != otp:
-                return JsonResponse({'alert': 'Invalid OTP'}, status=400)
-
-            # Clear OTP after verification
-            del otp_storage[email]
-
-            return JsonResponse({'message': 'OTP Verified'}, status=200)
+            if verify_otp(email, user_otp):
+                return JsonResponse({'message': 'OTP Verified Successfully'}, status=200)
+            else:
+                return JsonResponse({'message': 'Invalid or Expired OTP'}, status=400)
 
         except json.JSONDecodeError:
             return JsonResponse({'message': 'Invalid JSON'}, status=400)
 
     return JsonResponse({'message': 'Invalid request method'}, status=405)
+
+def send_password_reset_email(email):
+    try:
+        message = MIMEMultipart()
+        message['From'] = SMTP_USERNAME
+        message['To'] = email
+        message['Subject'] = 'Password Reset Successful'
+
+        body = "Your password has been successfully reset. If you did not perform this action, please contact support immediately."
+        message.attach(MIMEText(body, 'plain'))
+
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()
+            server.login(SMTP_USERNAME, SMTP_PASSWORD)
+            server.send_message(message)
+        return True
+    except Exception as e:
+        print(f"Email sending error: {e}")
+        return False
+
+def verify_otp(email, user_input_otp):
+    if email not in otp_storage:
+        return False
+    
+    stored_otp_info = otp_storage[email]
+    
+    current_time = time.time()
+    if current_time - stored_otp_info['timestamp'] > 600:
+        del otp_storage[email]
+        return False
+    
+    if stored_otp_info['otp'] == user_input_otp:
+        send_password_reset_email(email)
+        del otp_storage[email]  
+        return True
+    
+    return False
 
 @csrf_exempt
 def user_reset(request):
@@ -124,7 +160,7 @@ def user_reset(request):
             email = data.get('email')
             new_password = data.get('newPassword')
 
-            # Update password in database
+
             result = db.users_signupdetail.update_one(
                 {'email': email},
                 {'$set': {'password': new_password}}
