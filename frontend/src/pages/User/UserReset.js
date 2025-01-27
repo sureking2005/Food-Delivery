@@ -20,18 +20,25 @@ const UserReset = () => {
 
     const handleResetPassword = async (e) => {
         e.preventDefault();
-        
+    
+        // Password validation
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+        if (!passwordRegex.test(passwords.newPassword)) {
+            alert('Password must be 6 characters with lowercase, uppercase, and numbers');
+            return;
+        }
+    
         if (passwords.newPassword !== passwords.confirmPassword) {
             alert("Passwords do not match");
             return;
         }
-
+    
         try {
             const response = await axios.post('http://localhost:8000/userreset/', {
                 email: location.state?.email,
                 newPassword: passwords.newPassword
             });
-
+    
             if (response.data.message === 'Password Reset Successful') {
                 alert('Password reset successful');
                 navigate('/userlogin');
