@@ -11,6 +11,15 @@ urlpatterns=[
     path('userverifyemail/',user.user_verify_email,name='user_verify_email'),
     path('userverifyforgotemail/',user.user_verify_forgot_email,name='user_verify_forgot_email'),
     path('userverifyotp/',user.user_verify_otp,name='user_verify_otp'),
+    path('userhome/',user.user_home,name='user_home'),
+    path('usercart/',user.user_cart,name='user_cart'),
+    path('useraddcart/',user.user_add_cart,name='user_add_cart'),
+    path('updatecart/<str:item_id>', user.user_update_cart, name='user_update_cart'),
+    path('removecart/<str:item_id>', user.user_update_cart, name='user_remove_cart'),
+    path('placeorder/', user.user_order, name='user_order'), 
+
+
+
 
 
 
@@ -29,8 +38,8 @@ urlpatterns=[
     path('adminverifyotp/',views.admin_verify_otp,name='admin_verify_otp'),
     path('adminhome/',views.admin_home,name='admin_home'),
     path('adminhomeupdate/',views.admin_home_update,name='admin_home_update'),
-    # path('adminuser/',views.admin_user,name='admin_user'),
-    # path('adminowner/',views.admin_owner,name='admin_owner'),
+    path('adminuser/',views.admin_user,name='admin_user'),
+    path('adminowner/',views.admin_owner,name='admin_owner'),
     # path('admindeliveryboy/',views.admin_deliveryboy,name='admin_deliveryboy'),
  
  
@@ -47,11 +56,6 @@ urlpatterns=[
     path('owneradd/',owner.owner_add,name='owner_add'),
     path('ownersubmissions/',owner.owner_submissions,name='owner_submissions'),
     path('ownermenu/',owner.owner_menu,name='owner_menu'),
-
-
-
-    path('addcart/',user.add_to_cart,name='add_to_cart'),
-
 
 
 ]

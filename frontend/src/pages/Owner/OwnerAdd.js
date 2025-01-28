@@ -12,19 +12,52 @@ const OwnerAdd = () => {
     hotel_number: '',
     food_menu: '',
     status: 'in_review',
-    Role:'Owner'
+    Role: 'Owner'
   });
+    
+  const [phoneError, setPhoneError] = useState('');
+
+  const validatePhoneNumber = (phone) => {
+    const phoneRegex = /^\d{10}$/;
+    return phoneRegex.test(phone);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFoodItem(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    
+    if (name === 'hotel_number') {
+      
+      const numericValue = value.replace(/[^\d]/g, '');
+      
+      
+      const truncatedValue = numericValue.slice(0, 10);
+      
+      if (!validatePhoneNumber(truncatedValue) && truncatedValue.length > 0) {
+        setPhoneError('Phone number must be exactly 10 digits');
+      } else {
+        setPhoneError('');
+      }
+
+      setFoodItem(prev => ({
+        ...prev,
+        [name]: truncatedValue
+      }));
+    } else {
+      setFoodItem(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validatePhoneNumber(foodItem.hotel_number)) {
+      setPhoneError('Phone number must be exactly 10 digits');
+      return;
+    }
+
     try {
       const response = await axios.post('http://localhost:8000/owneradd/', foodItem);
       if (response.status === 200) {
@@ -38,6 +71,7 @@ const OwnerAdd = () => {
           food_menu: '',
           status: 'in_review'
         });
+        setPhoneError('');
       }
     } catch (error) {
       alert('Failed to submit');
@@ -111,7 +145,11 @@ const OwnerAdd = () => {
             onChange={handleChange}
             required
             className="w-full p-2 border rounded"
+            placeholder="Enter 10 digit number"
           />
+          {phoneError && (
+            <span className="text-red-500 text-sm mt-1">{phoneError}</span>
+          )}
         </div>
         <div>
           <label className="block mb-1">Food Menu:</label>
@@ -127,6 +165,7 @@ const OwnerAdd = () => {
         <button
           type="submit"
           className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          disabled={phoneError !== ''}
         >
           Submit
         </button>

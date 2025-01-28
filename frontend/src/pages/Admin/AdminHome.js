@@ -8,6 +8,7 @@ const AdminHome = () => {
 
   const fetchData = useCallback(async () => {
     try {
+      setLoading(true);
       let endpoint;
       switch(activeView) {
         case 'hotels':
@@ -27,13 +28,14 @@ const AdminHome = () => {
       }
       
       const response = await axios.get(`http://localhost:8000/${endpoint}/`);
+      console.log('Fetched data:', response.data); 
       setData(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error);
       setLoading(false);
     }
-  }, [activeView]); 
+  }, [activeView]);
 
   useEffect(() => {
     fetchData();
@@ -144,14 +146,22 @@ const AdminHome = () => {
         </tr>
       </thead>
       <tbody>
-        {data.map((user, index) => (
-          <tr key={index} style={{ borderBottom: '1px solid #ddd' }}>
-            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.name}</td>
-            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.email}</td>
-            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.phone}</td>
-            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.role}</td>
+        {data && data.length > 0 ? (
+          data.map((user, index) => (
+            <tr key={index} style={{ borderBottom: '1px solid #ddd' }}>
+              <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.username || 'N/A'}</td>
+              <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.email || 'N/A'}</td>
+              <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.phonenumber || 'N/A'}</td>
+              <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.Role || 'User'}</td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="4" style={{ textAlign: 'center', padding: '20px' }}>
+              No users found
+            </td>
           </tr>
-        ))}
+        )}
       </tbody>
     </table>
   );
@@ -174,8 +184,8 @@ const AdminHome = () => {
           <tr key={index} style={{ borderBottom: '1px solid #ddd' }}>
             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.owner_name}</td>
             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.hotel_name}</td>
-            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.email}</td>
-            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.phone}</td>
+            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.hotel_email}</td>
+            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.hotel_number}</td>
             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.status}</td>
             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.role}</td>
 
@@ -193,7 +203,6 @@ const AdminHome = () => {
           <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Email</th>
           <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Phone</th>
           <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Vehicle Type</th>
-          <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Status</th>
         </tr>
       </thead>
       <tbody>
@@ -203,7 +212,6 @@ const AdminHome = () => {
             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{delivery.email}</td>
             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{delivery.phone}</td>
             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{delivery.vehicle_type}</td>
-            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{delivery.status}</td>
           </tr>
         ))}
       </tbody>

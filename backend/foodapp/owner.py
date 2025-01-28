@@ -325,7 +325,7 @@ def owner_menu(request):
             food_item=({
                 'name':request.POST.get('name'),
                 'price':request.POST.get('price'),
-                'stocks':request.POST.get('stocks'),
+                'stock':request.POST.get('stock'),
 
                 
                 'image':{

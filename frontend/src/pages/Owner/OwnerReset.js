@@ -21,7 +21,6 @@ const OwnerReset = () => {
     const handleResetPassword = async (e) => {
         e.preventDefault();
     
-        // Password validation
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
         if (!passwordRegex.test(passwords.newPassword)) {
             alert('Password must be 6 characters with lowercase, uppercase, and numbers');

@@ -10,6 +10,8 @@ from email.mime.text import MIMEText
 import random
 import bcrypt
 from datetime import datetime, timedelta
+from bson import ObjectId
+
 
 
 client=MongoClient('mongodb+srv://kavinkavin8466:1234@fooddelivery.i05g3.mongodb.net/?retryWrites=true&w=majority&appName=fooddelivery')
@@ -180,6 +182,7 @@ def user_signup(request):
             
 
             user = db.users_signupdetail.insert_one({
+                'name':data['name'],
                 'email': data['email'],
                 'phonenumber': data['phonenumber'],
                 'password':  hashed_password.decode('utf-8'),
@@ -212,7 +215,7 @@ def user_login(request):
                 login_attempts[primary_key] = {'count': 0, 'timestamp': datetime.now()}
             
             if login_attempts[primary_key]['count'] >= 5:
-                return JsonResponse({'error': 'Account locked. Try again later.'}, status=403)
+                return JsonResponse({'error': 'Account locked. Try again after 12 hours.'}, status=403)
 
             if existing_user:
                 if bcrypt.checkpw(password.encode('utf-8'), existing_user['password'].encode('utf-8')):
@@ -242,20 +245,216 @@ def user_login(request):
         
 
 @csrf_exempt
-def add_to_cart(request):
+def user_home(request):
+    if request.method=='GET':
+        try:
+            food_items=list(db.owner_menu.find())
+
+            processed=[]
+
+            for food in food_items:
+                food['_id']=str(food['_id'])
+
+                if food.get('image'):
+                    food['image'] = {
+                    'filename': food['image']['filename'],
+                    'content': base64.b64encode(food['image']['content']).decode('utf-8'),
+                    'content_type': food['image']['content_type']
+                }
+
+                processed.append(food)
+
+            return JsonResponse(processed,safe=False)
+        except Exception as e:    
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'alert':'Invalid request method'},status=400)
+        
+
+@csrf_exempt
+def user_cart(request):
+    if request.method == 'POST':
+        try:
+           
+            image = request.FILES.get('image')
+            
+            
+            name = request.POST.get('name')
+            price = request.POST.get('price')
+            stock = int(request.POST.get('stock', 0)) 
+            email = request.POST.get('email')
+            
+           
+            existing_item = db.user_carts.find_one({'name': name})
+            
+            if existing_item:
+                
+                current_count = int(existing_item.get('count', 1))
+                new_count = current_count + 1
+                
+                db.user_carts.update_one(
+                    {'name': name},
+                    {'$set': {'count': new_count}}
+                )
+                
+                return JsonResponse({'message': 'Item count updated successfully'}, status=200)
+            else:
+                
+                food_item = {
+                    'name': name,
+                    'price': price,
+                    'stock': stock,
+                    'count': 1,
+                    'email': email
+                }
+                
+               
+                if image:
+                    food_item['image'] = {
+                        'filename': image.name,
+                        'content': base64.b64encode(image.read()).decode('utf-8'),
+                        'content_type': image.content_type
+                    }
+                
+              
+                db.user_carts.insert_one(food_item)
+                return JsonResponse({'message': 'Food added successfully'}, status=200)
+                
+        except Exception as e:
+            print(f"Error in user_cart: {str(e)}")  
+            return JsonResponse({'message': str(e)}, status=400)
+    
+    return JsonResponse({'message': 'Invalid Request method'}, status=405)
+        
+@csrf_exempt
+def user_add_cart(request):
+    if request.method == 'GET':
+        try:
+            food_items = list(db.user_carts.find())
+            processed = []
+            
+            for food in food_items:
+                food['_id'] = str(food['_id'])
+                
+                
+                if food.get('image') and isinstance(food['image'].get('content'), (bytes, bytearray)):
+                    
+                    food['image']['content'] = base64.b64encode(food['image']['content']).decode('utf-8')
+                elif food.get('image') and isinstance(food['image'].get('content'), str):
+                    
+                    food['image']['content'] = food['image']['content']
+
+                if food.get('stock'):
+                    food['stock'] = int(food['stock']) 
+
+                    
+                processed.append(food)
+                
+            return JsonResponse(processed, safe=False)
+        except Exception as e:
+            print(f"Error processing cart items: {str(e)}") 
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'alert': 'Invalid request method'}, status=400)
+
+@csrf_exempt
+def user_update_cart(request, item_id):
+    try:
+        
+        if not ObjectId.is_valid(item_id):
+            return JsonResponse({'message': 'Invalid item ID format'}, status=400)
+            
+        obj_id = ObjectId(item_id)
+        
+        if request.method == 'PUT':
+            try:
+                data = json.loads(request.body)
+                new_count = data.get('count')
+                
+                if new_count is None:
+                    return JsonResponse({'message': 'Count is required'}, status=400)
+                
+                result = db.user_carts.update_one(
+                    {'_id': obj_id},
+                    {'$set': {'count': new_count}}
+                )
+                
+                if result.modified_count > 0:
+                    return JsonResponse({'message': 'Cart updated successfully'}, status=200)
+                return JsonResponse({'message': 'Item not found'}, status=404)
+                
+            except json.JSONDecodeError:
+                return JsonResponse({'message': 'Invalid JSON'}, status=400)
+                
+        elif request.method == 'DELETE':
+            
+            item = db.user_carts.find_one({'_id': obj_id})
+            if not item:
+                return JsonResponse({'message': 'Item not found'}, status=404)
+            
+            result = db.user_carts.delete_one({'_id': obj_id})
+            
+            if result.deleted_count > 0:
+                return JsonResponse({'message': 'Cart removed successfully'}, status=200)
+            return JsonResponse({'message': 'Failed to remove item'}, status=500)
+            
+        return JsonResponse({'message': 'Invalid request method'}, status=405)
+        
+    except Exception as e:
+        return JsonResponse({'message': f'Server error: {str(e)}'}, status=500)
+
+
+
+
+@csrf_exempt
+def user_order(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
-            email = data.get('email')
-            item = data.get('item')
+            user_id = data.get('userId')  # Assuming user ID is sent in the request
+            items = data.get('items', [])
+            shipping_address = data.get('shippingAddress', '')
+            total_amount = data.get('totalAmount', 0)
 
-            result = db.user_carts.update_one(
-                {'email': email},
-                {'$push': {'items': item}},
-                upsert=True
-            )
+            for item in items:
+                name = item.get('name', '')
+                ordered_quantity = int(item.get('quantity', 0))
 
-            return JsonResponse({'message': 'Item Added to Cart'}, status=200)
+                # Find the current stock
+                menu_item = db.owner_menu.find_one({'name': name})
+                if not menu_item:
+                    return JsonResponse({'message': f'Item {name} not found in stock'}, status=404)
 
-        except json.JSONDecodeError:
-            return JsonResponse({'message': 'Invalid JSON'}, status=400)
+                current_stock =int(menu_item.get('stock', 0))
+
+                # Ensure stock doesn't go negative
+                if current_stock < ordered_quantity:
+                    return JsonResponse({'message': f'Insufficient stock for {name}'}, status=400)
+
+                # Subtract the ordered quantity from the current stock
+                new_stock = current_stock - ordered_quantity
+
+                result = db.owner_menu.update_one(
+                    {'name': name},
+                    {'$set': {'stock': new_stock}}  # Fixed 'stocks' -> 'stock' if it's a typo
+                )
+
+                if result.modified_count == 0:
+                    return JsonResponse({'message': f'Failed to update stock for {name}'}, status=500)
+
+            # Save the order
+            order_data = {
+                'userId': user_id,
+                'items': items,
+                'shippingAddress': shipping_address,
+                'totalAmount': total_amount,
+            }
+            result = db.user_orders.insert_one(order_data)
+
+            # Clear the user's cart after successful order placement
+            db.user_carts.delete_many({'userId': user_id})
+
+            return JsonResponse({'message': 'Order placed successfully!', 'order_id': str(result.inserted_id)}, status=200)
+
+        except Exception as e:
+            return JsonResponse({'message': str(e)}, status=500)
+    else:
+        return JsonResponse({'message': 'Invalid request method'}, status=400)

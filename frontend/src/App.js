@@ -8,6 +8,8 @@ import UserHome from './pages/User/UserHome';
 import UserForgot from './pages/User/UserForgot';
 import UserReset from './pages/User/UserReset';
 import UserCart from './pages/User/UserCart';
+import UserOrder from './pages/User/UserOrder';
+
 
 import AdminLogin from './pages/Admin/AdminLogin';
 import AdminSignup from './pages/Admin/AdminSignup';
@@ -50,6 +52,8 @@ function App() {
         <Route path="/userforgot" element={<UserForgot/>}/>
         <Route path="/userreset" element={<UserReset/>}/>
         <Route path="/usercart" element={<UserCart/>}/>
+        <Route path="/userorder" element={<UserOrder/>}/>
+
 
 
         <Route path="/adminlogin" element={<AdminLogin/>}/>
