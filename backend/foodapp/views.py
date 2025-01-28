@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -159,7 +158,7 @@ def user_signup(request):
             phonenumber = data.get('phonenumber')
 
             
-            Required_fields = ['email', 'phonenumber', 'password', 'otp']
+            Required_fields = ['name','email', 'phonenumber', 'password', 'otp','role']
             for field in Required_fields:
                 if field not in data:
                     return JsonResponse({'error': f'{field} is required'}, status=400)
@@ -439,7 +438,7 @@ def owner_login(request):
             return JsonResponse({'error': str(e)}, status=500)
         
 @csrf_exempt
-def owner_home(request):
+def owner_add(request):
     if request.method=='POST':
         try:
             data=json.loads(request.body.decode('utf-8'))
@@ -471,7 +470,27 @@ def owner_home(request):
             return JsonResponse({'alert':'Invalid JSON'},status=400)    
 
     return JsonResponse({'alert':'Invalid request method'},status=405)    
-        
+
+
+@csrf_exempt
+def owner_submissions(request):
+    if request.method == 'GET':
+        try:
+            submissions = list(db.owner_details.find())
+            
+            processed=[]
+            for data in submissions:
+                data['_id']=str(data['_id'])
+                
+                processed.append(data)
+            
+            return JsonResponse(processed,safe=False)    
+           
+        except Exception as e:
+             return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error':'invalid Method'}, status=405)    
+                
 @csrf_exempt
 def admin_verify_email(request):
     if request.method == 'POST':
@@ -928,3 +947,4 @@ def add_to_cart(request):
 
         except json.JSONDecodeError:
             return JsonResponse({'message': 'Invalid JSON'}, status=400)
+
