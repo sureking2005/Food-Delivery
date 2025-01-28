@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
 
-const UserLogin = () => {
+const OwnerLogin = () => {
     const [primary_key, setPrimary_key] = useState('');
 
     const [password, setPassword] = useState('');
@@ -14,7 +14,7 @@ const UserLogin = () => {
         setError(''); 
 
         try {
-            const response = await axios.post('http://localhost:8000/userlogin/', {
+            const response = await axios.post('http://localhost:8000/ownerlogin/', {
                 primary_key: primary_key ,
                 password: password
             });
@@ -22,7 +22,7 @@ const UserLogin = () => {
             if (response.status === 200) {
                 console.log('Login successful', response.data);
                 alert('Login Successful');
-                navigate('/userhome');
+                navigate('/ownerhome');
             }
         } catch (err) {
             if (err.response) {
@@ -37,17 +37,17 @@ const UserLogin = () => {
     };
 
     const handleSignup = () => {
-        navigate('/usersignup');
+        navigate('/ownersignup');
     };
 
     const handleforgot = () => {
-        navigate('/userforgot');
+        navigate('/ownerforgot');
     };
 
     return (
-        <div className='userlogin'>
+        <div className='ownerlogin'>
             <div className='login-card'>
-            <h1>User Login</h1>
+            <h1>Owner Login</h1>
             {error && <div className="error-message text-red-500">{error}</div>}
             <form onSubmit={handleLogin}>
                 <div className='login-column'>
@@ -81,7 +81,7 @@ const UserLogin = () => {
             </div>
             </div>
             <style>{`
-                .userlogin {
+                .ownerlogin {
                     display: flex;
                     justify-content: center;
                     align-items: center;
@@ -90,7 +90,7 @@ const UserLogin = () => {
                     font-family: 'Arial', sans-serif;
                 }
 
-                .userlogin .login-card {
+                .ownerlogin .login-card {
                     background: white;
                     border-radius: 15px;
                     box-shadow: 0 15px 35px rgba(0,0,0,0.1);
@@ -99,19 +99,19 @@ const UserLogin = () => {
                     text-align: center;
                 }
 
-                .userlogin h1 {
+                .ownerlogin h1 {
                     color: #333;
                     margin-bottom: 30px;
                     font-size: 28px;
                 }
 
-                .userlogin .login-column {
+                .ownerlogin .login-column {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                 }
 
-                .userlogin input {
+                .ownerlogin input {
                     width: 100%;
                     padding: 14px;
                     margin-bottom: 20px;
@@ -120,13 +120,13 @@ const UserLogin = () => {
                     transition: all 0.3s ease;
                 }
 
-                .userlogin input:focus {
+                .ownerlogin input:focus {
                     outline: none;
                     border-color: #667eea;
                     box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
                 }
 
-                .userlogin button {
+                .ownerlogin button {
                     width: 100%;
                     padding: 14px;
                     background: linear-gradient(to right, #667eea, #764ba2);
@@ -138,7 +138,7 @@ const UserLogin = () => {
                     margin-bottom: 20px;
                 }
 
-                .userlogin button:hover {
+                .ownerlogin button:hover {
                     transform: scale(1.05);
                 }
 
@@ -151,11 +151,11 @@ const UserLogin = () => {
                     text-decoration: underline;
                 }
 
-                .userlogin .signup-link {
+                .ownerlogin .signup-link {
                     margin-top: 15px;
                 }
 
-                .userlogin .signup-link button {
+                .ownerlogin .signup-link button {
                     background: none;
                     border: none;
                     color: #667eea;
@@ -168,4 +168,4 @@ const UserLogin = () => {
     );
 }
 
-export default UserLogin;
+export default OwnerLogin;

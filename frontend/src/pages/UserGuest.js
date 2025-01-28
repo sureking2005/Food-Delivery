@@ -20,12 +20,24 @@ const GuestUserHome = () => {
     navigate('/deliveryboylogin');
   };
 
+  // const handleAdminLogin = () => {
+  //   navigate('/adminlogin');
+  // };
+
+  const handleOwnerLogin = () => {
+    navigate('/ownerlogin');
+  };
+  
+
   return (
     <div>
       <nav>
         <button onClick={() => navigate('/')}>Home</button>
+        {/* <button onClick={handleAdminLogin}>Admin Login</button> */}
+        <button onClick={handleOwnerLogin}>Owner Login/Signup</button>
         <button onClick={handleUserLogin}>Customer Login/Signup</button>
         <button onClick={handleDeliveryLogin}>Deliveryboy Login/Signup</button>
+
       </nav>
 
       <h1>Food Delivery App</h1>

@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const UserSignup = () => {
+const OwnerSignup = () => {
     const [formData, setFormData] = useState({
-        name:'',
+
         email: '',
         phonenumber: '',
         password: '',
         otp: '',
-        role:'Customer'
+        role:'Owner'
 
     });
     const [emailVerified, setEmailVerified] = useState(false);
@@ -53,7 +53,7 @@ const UserSignup = () => {
 
     const verifyEmail = async () => {
         try {
-            const response = await axios.post('http://localhost:8000/userverifyemail/', {
+            const response = await axios.post('http://localhost:8000/ownerverifyemail/', {
                 email: formData.email
             });
     
@@ -92,7 +92,7 @@ const UserSignup = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:8000/usersignup/', formData, {
+            const response = await axios.post('http://localhost:8000/ownersignup/', formData, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
@@ -100,7 +100,7 @@ const UserSignup = () => {
     
             if (response.data.message === 'Signup Successful') {
                 alert('Signup Successful');
-                navigate('/userhome');
+                navigate('/ownerhome');
             }
         } catch (error) {
             console.error('Signup error:', error.response ? error.response.data : error.message);
@@ -116,17 +116,9 @@ const UserSignup = () => {
     return (
             <div className="signup-container">
             <div className="signup-form">
-            <h1>User Signup</h1>
+            <h1>Owner Signup</h1>
             <form onSubmit={handleSubmit}>
                 <div>
-                <input
-                        type="name"
-                        name="name"
-                        placeholder="Enter Name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                    />
                     <input
                         type="email"
                         name="email"
@@ -242,4 +234,4 @@ const UserSignup = () => {
     );
 };
 
-export default UserSignup;
+export default OwnerSignup;

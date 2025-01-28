@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const DeliveryboyForgot = () => {
+const OwnerForgot = () => {
     const [email, setEmail] = useState('');
     const [otp, setOtp] = useState('');
     const [emailVerified, setEmailVerified] = useState(false);
@@ -10,7 +10,7 @@ const DeliveryboyForgot = () => {
 
     const handleVerifyEmail = async () => {
         try {
-            const response = await axios.post('http://localhost:8000/deliveryboyverifyforgotemail/', { email });
+            const response = await axios.post('http://localhost:8000/ownerverifyforgotemail/', { email });
             if (response.data.message === 'OTP Sent') {
                 setEmailVerified(true);
                 alert('OTP sent to your email');
@@ -22,13 +22,13 @@ const DeliveryboyForgot = () => {
 
     const handleVerifyOtp = async () => {
         try {
-            const response = await axios.post('http://localhost:8000/deliveryboyverifyotp/', { 
+            const response = await axios.post('http://localhost:8000/ownerverifyotp/', { 
                 email, 
                 otp 
             });
             
             if (response.data.message === 'OTP Verified') {
-                navigate('/deliveryboyreset', { state: { email } });
+                navigate('/ownerreset', { state: { email } });
             }
         } catch (error) {
             alert(error.response?.data?.alert || 'OTP verification failed');
@@ -122,4 +122,4 @@ const DeliveryboyForgot = () => {
     );
 };
 
-export default DeliveryboyForgot;
+export default OwnerForgot;

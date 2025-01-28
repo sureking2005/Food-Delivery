@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-const DeliveryboyReset = () => {
+const OwnerReset = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [passwords, setPasswords] = useState({
@@ -33,14 +33,14 @@ const DeliveryboyReset = () => {
         }
     
         try {
-            const response = await axios.post('http://localhost:8000/deliveryboyreset/', {
+            const response = await axios.post('http://localhost:8000/ownerreset/', {
                 email: location.state?.email,
                 newPassword: passwords.newPassword
             });
     
             if (response.data.message === 'Password Reset Successful') {
                 alert('Password reset successful');
-                navigate('/deliveryboylogin');
+                navigate('/ownerlogin');
             }
         } catch (error) {
             alert(error.response?.data?.message || 'Password reset failed');
@@ -140,4 +140,4 @@ const DeliveryboyReset = () => {
     );
 };
 
-export default DeliveryboyReset;
+export default OwnerReset;
