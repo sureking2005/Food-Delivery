@@ -24,9 +24,9 @@ const OwnerSubmissions = () => {
 
   const handleRedirect = (status) => {
     if (status === "accepted") {
-      window.location.href = "/owner_home";
+      window.location.href = "/ownermenu";
     } else {
-      window.location.href = "/owner_addsubmissions";
+      window.location.href = "/owneradd";
     }
   };
 
@@ -128,7 +128,7 @@ const OwnerSubmissions = () => {
                         onClick={() => handleRedirect("accepted")}
                         style={buttonStyle("#2f855a", "#f0fff4")}
                       >
-                        Go to Home
+                        Go to menu
                       </button>
                     ) : (
                       <>

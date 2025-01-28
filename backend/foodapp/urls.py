@@ -43,7 +43,7 @@ urlpatterns=[
     path('ownerverifyotp/',views.owner_verify_otp,name='owner_verify_otp'),
     path('owneradd/',views.owner_add,name='owner_add'),
     path('ownersubmissions/',views.owner_submissions,name='owner_submissions'),
-
+    path('ownermenu/',views.owner_menu,name='owner_menu'),
 
 
 

@@ -41,15 +41,14 @@ def send_otp_email(email, otp):
         print(f"Email sending error: {e}")
         return False
 
-        
 @csrf_exempt
-def deliveryboy_verify_email(request):
+def user_verify_email(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
             email = data.get('email')
 
-            existing_user = db.deliveryboy_signupdetail.find_one({'email': email})
+            existing_user = db.users_signupdetail.find_one({'email': email})
 
             if existing_user:
                 return JsonResponse({'alert': 'Email already exists'}, status=400)
@@ -68,14 +67,14 @@ def deliveryboy_verify_email(request):
     return JsonResponse({'message': 'Invalid request method'}, status=405)
 
 @csrf_exempt
-def deliveryboy_verify_forgot_email(request):
+def user_verify_forgot_email(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
             email = data.get('email')
     
 
-            existing_user = db.deliveryboy_signupdetail.find_one({'email': email})
+            existing_user = db.users_signupdetail.find_one({'email': email})
 
             if existing_user :
 
@@ -102,7 +101,7 @@ def deliveryboy_verify_forgot_email(request):
 
 
 @csrf_exempt
-def deliveryboy_verify_otp(request):
+def user_verify_otp(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
@@ -125,7 +124,7 @@ def deliveryboy_verify_otp(request):
     return JsonResponse({'message': 'Invalid request method'}, status=405)
 
 @csrf_exempt
-def deliveryboy_reset(request):
+def user_reset(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
@@ -134,7 +133,7 @@ def deliveryboy_reset(request):
 
             hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
 
-            result = db.deliveryboy_signupdetail.update_one(
+            result = db.users_signupdetail.update_one(
                 {'email': email},
                 {'$set': {'password': hashed_password.decode('utf-8')}}
             )
@@ -152,19 +151,19 @@ def deliveryboy_reset(request):
 
 
 @csrf_exempt
-def deliveryboy_signup(request):
+def user_signup(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
             phonenumber = data.get('phonenumber')
 
             
-            Required_fields = ['email', 'phonenumber', 'password', 'otp']
+            Required_fields = ['name','email', 'phonenumber', 'password', 'otp','role']
             for field in Required_fields:
                 if field not in data:
                     return JsonResponse({'error': f'{field} is required'}, status=400)
                 
-            existing_phone = db.deliveryboy_signupdetail.find_one({'phonenumber': phonenumber})
+            existing_phone = db.users_signupdetail.find_one({'phonenumber': phonenumber})
             if existing_phone:
                 return JsonResponse({'alert': 'Phonenumber already exists'}, status=400)
             
@@ -173,14 +172,14 @@ def deliveryboy_signup(request):
             if stored_otp != data['otp']:
                 return JsonResponse({'alert': 'Invalid OTP'}, status=400)
 
-            existing_user = db.deliveryboy_signupdetail.find_one({'email': data['email']})
+            existing_user = db.users_signupdetail.find_one({'email': data['email']})
             if existing_user:
                 return JsonResponse({'alert': 'Email already exists'}, status=400)
             
             hashed_password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt())
             
 
-            user = db.deliveryboy_signupdetail.insert_one({
+            user = db.users_signupdetail.insert_one({
                 'email': data['email'],
                 'phonenumber': data['phonenumber'],
                 'password':  hashed_password.decode('utf-8')
@@ -197,15 +196,15 @@ def deliveryboy_signup(request):
 
 
 @csrf_exempt
-def deliveryboy_login(request):
+def user_login(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
             primary_key = data.get('primary_key')
             password = data.get('password')
 
-            existing_user = db.deliveryboy_signupdetail.find_one({'email': primary_key})
-            existing_user_1 =  db.deliveryboy_signupdetail.find_one({'phonenumber': primary_key})
+            existing_user = db.users_signupdetail.find_one({'email': primary_key})
+            existing_user_1 =  db.users_signupdetail.find_one({'phonenumber': primary_key})
             
             
             if (primary_key) not in login_attempts:
@@ -238,9 +237,8 @@ def deliveryboy_login(request):
                 return JsonResponse({'error': 'User not found'}, status=404)
 
         except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)        
-
-
+            return JsonResponse({'error': str(e)}, status=500)
+        
 
 @csrf_exempt
 def add_to_cart(request):
@@ -260,4 +258,3 @@ def add_to_cart(request):
 
         except json.JSONDecodeError:
             return JsonResponse({'message': 'Invalid JSON'}, status=400)
-

@@ -25,7 +25,7 @@ const OwnerAdd = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/ownerhome/', foodItem);
+      const response = await axios.post('http://localhost:8000/owneradd/', foodItem);
       if (response.status === 200) {
         alert('Review in Progress');
         setFoodItem({
