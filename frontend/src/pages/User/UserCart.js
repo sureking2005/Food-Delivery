@@ -1,24 +1,22 @@
 import React, { useState, useEffect } from 'react';
 
 function UserCart() {
-  const [cartItems, setCartItems] = useState([]); // State to hold cart items
-  const [loading, setLoading] = useState(true); // State to handle loading
-  const [error, setError] = useState(null); // State to handle errors
-
-  // Fetch cart items from the backend
+  const [cartItems, setCartItems] = useState([]); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null); 
   useEffect(() => {
     async function fetchCartItems() {
       try {
-        const response = await fetch('/cart'); // Replace '/cart' with your backend endpoint
+        const response = await fetch('/cart'); 
         if (!response.ok) {
           throw new Error('Failed to fetch cart items');
         }
         const data = await response.json();
-        setCartItems(data); // Update the state with the cart items
+        setCartItems(data);
       } catch (err) {
         setError(err.message);
       } finally {
-        setLoading(false); // Stop the loading spinner
+        setLoading(false); 
       }
     }
 

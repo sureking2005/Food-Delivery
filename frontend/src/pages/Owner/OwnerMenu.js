@@ -6,6 +6,7 @@ const OwnerMenu = () => {
   const [foodItem, setFoodItem] = useState({
     name: '',
     price: '',
+    stocks:'',
     image: null
   });
   const [existingFoods, setExistingFoods] = useState([]);
@@ -31,6 +32,8 @@ const OwnerMenu = () => {
     const formData = new FormData();
     formData.append('name', foodItem.name);
     formData.append('price', foodItem.price);
+    formData.append('stocks', foodItem.stocks);
+
 
     if (foodItem.image) {
       formData.append('image', foodItem.image);
@@ -47,6 +50,7 @@ const OwnerMenu = () => {
       setFoodItem({
         name: '',
         price: '',
+        stocks:'',
         image: null
       });
 
@@ -96,6 +100,18 @@ const OwnerMenu = () => {
           className="w-full p-2 border rounded"
         />
       </div>
+      <div>
+        <label className="block">Number of stocks:</label>
+        <input
+          type="number"
+          name="stocks"
+          value={foodItem.stocks}
+          onChange={handleChange}
+          required
+          className="w-full p-2 border rounded"
+        />
+      </div>
+      
 
       <div>
         <label className="block">Food Image:</label>
@@ -123,6 +139,8 @@ const OwnerMenu = () => {
         <div key={index} className="border rounded p-4 shadow-md">
           <h3 className="font-bold">{food.name}</h3>
           <p>Price: ${food.price}</p>
+          <p>Number of Stocks:{food.stocks}</p>
+
 
           {food.image && (
             <img
