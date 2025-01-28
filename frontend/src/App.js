@@ -29,7 +29,7 @@ import OwnerForgot from './pages/Owner/OwnerForgot';
 import OwnerReset from './pages/Owner/OwnerReset';
 import OwnerSubmissions from './pages/Owner/OwnerSubmissions';
 import OwnerAdd from './pages/Owner/OwnerAdd';
-
+import OwnerMenu from './pages/Owner/OwnerMenu';
 
 
 function App() {
@@ -65,7 +65,7 @@ function App() {
         <Route path="/ownerreset" element={<OwnerReset/>}/>
         <Route path="/ownersubmissions" element={<OwnerSubmissions/>}/>
         <Route path="/owneradd" element={<OwnerAdd/>}/>
-
+        <Route path="/ownermenu" element={<OwnerMenu/>}/>
 
       </Routes>
     </Router>

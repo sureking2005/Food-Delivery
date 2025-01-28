@@ -490,6 +490,51 @@ def owner_submissions(request):
              return JsonResponse({'error': str(e)}, status=500)
     else:
         return JsonResponse({'error':'invalid Method'}, status=405)    
+
+@csrf_exempt
+def owner_menu(request):
+    if request.method=='GET':
+        food_items=list(db.owner_menu.find())
+
+        processed=[]
+
+        for food in food_items:
+            food['_id']=str(food['_id'])
+
+            if food.get('image'):
+                food['image'] = {
+                    'filename': food['image']['filename'],
+                    'content': base64.b64encode(food['image']['content']).decode('utf-8'),
+                    'content_type': food['image']['content_type']
+                }
+
+                processed.append(food)
+
+        return JsonResponse(processed,safe=False)  
+
+
+    elif request.method=='POST':
+        try:
+            image=request.FILES.get('image')
+
+            food_item=({
+                'name':request.POST.get('name'),
+                'price':request.POST.get('price'),
+                
+                'image':{
+                    'filename':image.name,
+                    'content' : image.read(),
+                    'content_type': image.content_type
+                }if image else None
+            })
+
+            store_food=db.owner_menu.insert_one(food_item)
+
+            return JsonResponse({'message':'Food added succesfully'},status=200)
+        except json.JSONDecodeError:
+            return JsonResponse({'message':'Invalid JSON'},status=400)
+        
+    return JsonResponse({'message':'Invalid Request method'},status=405)  
                 
 @csrf_exempt
 def admin_verify_email(request):
@@ -688,6 +733,45 @@ def admin_login(request):
 
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
+        
+@csrf_exempt
+def admin_home(request):
+    if request.method=='GET':
+        try:    
+            details=list(db.owner_details.find())
+
+            processed=[]
+
+            for detail in details:
+                detail['_id']=str(detail['_id'])
+
+                processed.append(detail)
+
+            return JsonResponse(processed,safe=False)
+        except json.JSONDecodeError:
+            return JsonResponse({'error':'Invalid JSON'},status=400)    
+
+
+    return JsonResponse({'alert':'Invalid Request method'},status=405)
+
+
+@csrf_exempt
+def admin_home_update(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            
+            db.owner_details.update_one(
+                {'hotel_email': data['hotel_email']},  
+                {'$set': {'status': data['status']}}   
+            )
+            
+            return JsonResponse({'message': f'Status {data["status"]} successfully'})
+            
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    
+    return JsonResponse({'error': 'Invalid request method'}, status=405)   
 
         
 @csrf_exempt

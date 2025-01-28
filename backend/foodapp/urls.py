@@ -24,6 +24,10 @@ urlpatterns=[
     path('adminverifyemail/',views.admin_verify_email,name='admin_verify_email'),
     path('adminverifyforgotemail/',views.admin_verify_forgot_email,name='admin_verify_forgot_email'),
     path('adminverifyotp/',views.admin_verify_otp,name='admin_verify_otp'),
+    path('adminhome/',views.admin_home,name='admin_home'),
+    path('adminhomeupdate/',views.admin_home_update,name='admin_home_update'),
+
+
 
     path('ownersignup/',views.owner_signup,name='owner_signup'),
     path('ownerlogin/',views.owner_login,name='owner_login'),
@@ -33,7 +37,7 @@ urlpatterns=[
     path('ownerverifyotp/',views.owner_verify_otp,name='owner_verify_otp'),
     path('owneradd/',views.owner_add,name='owner_add'),
     path('ownersubmissions/',views.owner_submissions,name='owner_submissions'),
-
+    path('ownermenu/',views.owner_menu,name='owner_menu'),
 
 
     path('addcart/',views.add_to_cart,name='add_to_cart'),
