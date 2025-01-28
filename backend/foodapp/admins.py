@@ -41,15 +41,18 @@ def send_otp_email(email, otp):
         print(f"Email sending error: {e}")
         return False
 
-        
+
+
+
+                
 @csrf_exempt
-def deliveryboy_verify_email(request):
+def admin_verify_email(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
             email = data.get('email')
 
-            existing_user = db.deliveryboy_signupdetail.find_one({'email': email})
+            existing_user = db.admin_signupdetail.find_one({'email': email})
 
             if existing_user:
                 return JsonResponse({'alert': 'Email already exists'}, status=400)
@@ -68,14 +71,14 @@ def deliveryboy_verify_email(request):
     return JsonResponse({'message': 'Invalid request method'}, status=405)
 
 @csrf_exempt
-def deliveryboy_verify_forgot_email(request):
+def admin_verify_forgot_email(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
             email = data.get('email')
     
 
-            existing_user = db.deliveryboy_signupdetail.find_one({'email': email})
+            existing_user = db.admin_signupdetail.find_one({'email': email})
 
             if existing_user :
 
@@ -102,7 +105,7 @@ def deliveryboy_verify_forgot_email(request):
 
 
 @csrf_exempt
-def deliveryboy_verify_otp(request):
+def admin_verify_otp(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
@@ -125,7 +128,7 @@ def deliveryboy_verify_otp(request):
     return JsonResponse({'message': 'Invalid request method'}, status=405)
 
 @csrf_exempt
-def deliveryboy_reset(request):
+def admin_reset(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
@@ -134,7 +137,7 @@ def deliveryboy_reset(request):
 
             hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
 
-            result = db.deliveryboy_signupdetail.update_one(
+            result = db.admin_signupdetail.update_one(
                 {'email': email},
                 {'$set': {'password': hashed_password.decode('utf-8')}}
             )
@@ -152,7 +155,7 @@ def deliveryboy_reset(request):
 
 
 @csrf_exempt
-def deliveryboy_signup(request):
+def admin_signup(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
@@ -164,7 +167,7 @@ def deliveryboy_signup(request):
                 if field not in data:
                     return JsonResponse({'error': f'{field} is required'}, status=400)
                 
-            existing_phone = db.deliveryboy_signupdetail.find_one({'phonenumber': phonenumber})
+            existing_phone = db.admin_signupdetail.find_one({'phonenumber': phonenumber})
             if existing_phone:
                 return JsonResponse({'alert': 'Phonenumber already exists'}, status=400)
             
@@ -173,14 +176,14 @@ def deliveryboy_signup(request):
             if stored_otp != data['otp']:
                 return JsonResponse({'alert': 'Invalid OTP'}, status=400)
 
-            existing_user = db.deliveryboy_signupdetail.find_one({'email': data['email']})
+            existing_user = db.admin_signupdetail.find_one({'email': data['email']})
             if existing_user:
                 return JsonResponse({'alert': 'Email already exists'}, status=400)
             
             hashed_password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt())
             
 
-            user = db.deliveryboy_signupdetail.insert_one({
+            user = db.admin_signupdetail.insert_one({
                 'email': data['email'],
                 'phonenumber': data['phonenumber'],
                 'password':  hashed_password.decode('utf-8')
@@ -197,15 +200,15 @@ def deliveryboy_signup(request):
 
 
 @csrf_exempt
-def deliveryboy_login(request):
+def admin_login(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
             primary_key = data.get('primary_key')
             password = data.get('password')
 
-            existing_user = db.deliveryboy_signupdetail.find_one({'email': primary_key})
-            existing_user_1 =  db.deliveryboy_signupdetail.find_one({'phonenumber': primary_key})
+            existing_user = db.admin_signupdetail.find_one({'email': primary_key})
+            existing_user_1 =  db.admin_signupdetail.find_one({'phonenumber': primary_key})
             
             
             if (primary_key) not in login_attempts:
@@ -238,26 +241,43 @@ def deliveryboy_login(request):
                 return JsonResponse({'error': 'User not found'}, status=404)
 
         except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)        
+            return JsonResponse({'error': str(e)}, status=500)
+        
+@csrf_exempt
+def admin_home(request):
+    if request.method=='GET':
+        try:    
+            details=list(db.owner_details.find())
 
+            processed=[]
+
+            for detail in details:
+                detail['_id']=str(detail['_id'])
+
+                processed.append(detail)
+
+            return JsonResponse(processed,safe=False)
+        except json.JSONDecodeError:
+            return JsonResponse({'error':'Invalid JSON'},status=400)    
+
+
+    return JsonResponse({'alert':'Invalid Request method'},status=405)
 
 
 @csrf_exempt
-def add_to_cart(request):
+def admin_home_update(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
-            email = data.get('email')
-            item = data.get('item')
-
-            result = db.user_carts.update_one(
-                {'email': email},
-                {'$push': {'items': item}},
-                upsert=True
+            
+            db.owner_details.update_one(
+                {'hotel_email': data['hotel_email']},  
+                {'$set': {'status': data['status']}}   
             )
-
-            return JsonResponse({'message': 'Item Added to Cart'}, status=200)
-
+            
+            return JsonResponse({'message': f'Status {data["status"]} successfully'})
+            
         except json.JSONDecodeError:
-            return JsonResponse({'message': 'Invalid JSON'}, status=400)
-
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    
+    return JsonResponse({'error': 'Invalid request method'}, status=405)   
