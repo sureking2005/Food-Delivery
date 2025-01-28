@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const OwnerHome = () => {
+  const navigate = useNavigate();
   const [foodItem, setFoodItem] = useState({
     hotel_name: '',
     owner_name: '',
@@ -44,7 +46,16 @@ const OwnerHome = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Submit Hotel</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Submit Hotel</h1>
+        <button
+          onClick={() => navigate('/ownersubmissions')}
+          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
+        >
+          View Submissions
+        </button>
+      </div>
+      
       <form onSubmit={handleSubmit} className="max-w-lg space-y-4">
         <div>
           <label className="block mb-1">Hotel Name:</label>
@@ -112,8 +123,8 @@ const OwnerHome = () => {
             className="w-full p-2 border rounded"
           />
         </div>
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
         >
           Submit

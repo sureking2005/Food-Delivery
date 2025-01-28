@@ -31,6 +31,9 @@ urlpatterns=[
     path('ownerverifyemail/',views.owner_verify_email,name='owner_verify_email'),
     path('ownerverifyforgotemail/',views.owner_verify_forgot_email,name='owner_verify_forgot_email'),
     path('ownerverifyotp/',views.owner_verify_otp,name='owner_verify_otp'),
+    path('ownerhome/',views.owner_home,name='owner_home'),
+    path('ownersubmissions/',views.owner_submissions,name='owner_submissions'),
+
 
 
     path('addcart/',views.add_to_cart,name='add_to_cart'),

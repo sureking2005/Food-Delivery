@@ -10,7 +10,7 @@ from email.mime.text import MIMEText
 import random
 import bcrypt
 from datetime import datetime, timedelta
-from bson import ObjectId
+
 
 client=MongoClient('mongodb+srv://kavinkavin8466:1234@fooddelivery.i05g3.mongodb.net/?retryWrites=true&w=majority&appName=fooddelivery')
 db = client['fooddelivery']
@@ -437,6 +437,60 @@ def owner_login(request):
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
         
+@csrf_exempt
+def owner_home(request):
+    if request.method=='POST':
+        try:
+            data=json.loads(request.body.decode('utf-8'))
+
+            required_feilds=['hotel_name','owner_name','hotel_address',
+                             'hotel_email','hotel_number','food_menu','status']
+            for feild in required_feilds:
+
+                if feild not in data:
+                    return JsonResponse({'alert':''f'{feild} is required'})
+                
+                owner_detail=db.owner_details.insert_one({
+                    'hotel_name':data['hotel_name'],
+                    'owner_name':data['owner_name'],
+                    'hotel_address':data['hotel_address'],
+                    'hotel_email':data['hotel_email'],
+                    'hotel_number':data['hotel_number'],
+                    'food_menu':data['food_menu'],
+                    'status':data['status']
+
+                })
+
+                if owner_detail:
+                    return JsonResponse({'message':'Submitted successfully'},status=200)
+                else:
+                    return JsonResponse({'error':'Not submitted'},status=400)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'alert':'Invalid JSON'},status=400)    
+
+    return JsonResponse({'alert':'Invalid request method'},status=405)    
+
+
+@csrf_exempt
+def owner_submissions(request):
+    if request.method == 'GET':
+        try:
+            submissions = list(db.owner_details.find())
+            
+            processed=[]
+            for data in submissions:
+                data['_id']=str(data['_id'])
+                
+                processed.append(data)
+            
+            return JsonResponse(processed,safe=False)    
+           
+        except Exception as e:
+             return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error':'invalid Method'}, status=405)    
+                
 @csrf_exempt
 def admin_verify_email(request):
     if request.method == 'POST':

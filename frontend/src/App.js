@@ -27,6 +27,7 @@ import OwnerSignup from './pages/Owner/OwnerSignup';
 import OwnerHome from './pages/Owner/OwnerHome';
 import OwnerForgot from './pages/Owner/OwnerForgot';
 import OwnerReset from './pages/Owner/OwnerReset';
+import OwnerSubmissions from './pages/Owner/OwnerSubmissions';
 
 
 
@@ -62,7 +63,7 @@ function App() {
         <Route path="/ownerhome" element={<OwnerHome/>}/>
         <Route path="/ownerforgot" element={<OwnerForgot/>}/>
         <Route path="/ownerreset" element={<OwnerReset/>}/>
-
+        <Route path="/ownersubmissions" element={<OwnerSubmissions/>}/>
 
 
 
