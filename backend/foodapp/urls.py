@@ -29,9 +29,9 @@ urlpatterns=[
     path('adminverifyotp/',views.admin_verify_otp,name='admin_verify_otp'),
     path('adminhome/',views.admin_home,name='admin_home'),
     path('adminhomeupdate/',views.admin_home_update,name='admin_home_update'),
-    path('adminuser/',views.admin_user,name='admin_user'),
-    path('adminowner/',views.admin_owner,name='admin_owner'),
-    path('admindeliveryboy/',views.admin_deliveryboy,name='admin_deliveryboy'),
+    # path('adminuser/',views.admin_user,name='admin_user'),
+    # path('adminowner/',views.admin_owner,name='admin_owner'),
+    # path('admindeliveryboy/',views.admin_deliveryboy,name='admin_deliveryboy'),
  
  
 
