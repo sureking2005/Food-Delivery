@@ -180,6 +180,7 @@ def user_signup(request):
             
 
             user = db.users_signupdetail.insert_one({
+                'name':data['name'],
                 'email': data['email'],
                 'phonenumber': data['phonenumber'],
                 'password':  hashed_password.decode('utf-8'),
@@ -212,7 +213,7 @@ def user_login(request):
                 login_attempts[primary_key] = {'count': 0, 'timestamp': datetime.now()}
             
             if login_attempts[primary_key]['count'] >= 5:
-                return JsonResponse({'error': 'Account locked. Try again later.'}, status=403)
+                return JsonResponse({'error': 'Account locked. Try again after 12 hours.'}, status=403)
 
             if existing_user:
                 if bcrypt.checkpw(password.encode('utf-8'), existing_user['password'].encode('utf-8')):

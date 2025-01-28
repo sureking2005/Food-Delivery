@@ -282,3 +282,45 @@ def admin_home_update(request):
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
     
     return JsonResponse({'error': 'Invalid request method'}, status=405)   
+
+@csrf_exempt
+def admin_user(request):
+    if request.method == 'GET':
+        try:
+    
+            details = list(db.users_signupdetail.find({}, {'_id': 0}))  
+           
+            processed_details = []
+            for detail in details:
+                if '_id' in detail:
+                    detail['_id'] = str(detail['_id'])
+                processed_details.append(detail)
+            
+            return JsonResponse(processed_details, safe=False)
+            
+        except Exception as e:
+            print(f"Error: {str(e)}")  
+            return JsonResponse({'error': 'Server error'}, status=500)
+            
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+@csrf_exempt
+def admin_owner(request):
+    if request.method == 'GET':
+        try:
+    
+            details = list(db.owner_details.find({}, {'_id': 0}))  
+           
+            processed_details = []
+            for detail in details:
+                if '_id' in detail:
+                    detail['_id'] = str(detail['_id'])
+                processed_details.append(detail)
+            
+            return JsonResponse(processed_details, safe=False)
+            
+        except Exception as e:
+            print(f"Error: {str(e)}")  
+            return JsonResponse({'error': 'Server error'}, status=500)
+            
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
