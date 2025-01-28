@@ -1,137 +1,93 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const OwnerHome = () => {
-  const navigate = useNavigate();
-  const [foodItem, setFoodItem] = useState({
-    hotel_name: '',
-    owner_name: '',
-    hotel_address: '',
-    hotel_email: '',
-    hotel_number: '',
-    food_menu: '',
-    status: 'in_review'
-  });
+    const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFoodItem(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+    const handleAddClick = () => {
+        navigate('/owneradd');
+    };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:8000/ownerhome/', foodItem);
-      if (response.status === 200) {
-        alert('Review in Progress');
-        setFoodItem({
-          hotel_name: '',
-          owner_name: '',
-          hotel_address: '',
-          hotel_email: '',
-          hotel_number: '',
-          food_menu: '',
-          status: 'in_review'
-        });
-      }
-    } catch (error) {
-      alert('Failed to submit');
-      console.error('Error:', error);
-    }
-  };
+    const handleSubmissionsClick = () => {
+        navigate('/ownersubmissions');
+    };
 
-  return (
-    <div className="container mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Submit Hotel</h1>
-        <button
-          onClick={() => navigate('/ownersubmissions')}
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
-        >
-          View Submissions
-        </button>
-      </div>
-      
-      <form onSubmit={handleSubmit} className="max-w-lg space-y-4">
-        <div>
-          <label className="block mb-1">Hotel Name:</label>
-          <input
-            type="text"
-            name="hotel_name"
-            value={foodItem.hotel_name}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded"
-          />
+    const handleMenuClick = () => {
+        navigate('/ownermenu');
+    };
+
+    return (
+        <div className="owner-home">
+            <div className="home-card">
+                <h1>Owner Dashboard</h1>
+                <div className="button-container">
+                    <button onClick={handleAddClick}>
+                        Add Submissions
+                    </button>
+                    <button onClick={handleSubmissionsClick}>
+                        View Submissions
+                    </button>
+                    <button onClick={handleMenuClick}>
+                        Manage Menu
+                    </button>
+                </div>
+            </div>
+
+            <style>{`
+                .owner-home {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    min-height: 100vh;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    font-family: 'Arial', sans-serif;
+                }
+
+                .home-card {
+                    background: white;
+                    border-radius: 15px;
+                    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+                    padding: 50px;
+                    width: 500px;
+                    text-align: center;
+                }
+
+                h1 {
+                    color: #333;
+                    margin-bottom: 40px;
+                    font-size: 32px;
+                }
+
+                .button-container {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                }
+
+                button {
+                    width: 100%;
+                    padding: 16px;
+                    background: linear-gradient(to right, #667eea, #764ba2);
+                    color: white;
+                    border: none;
+                    border-radius: 8px;
+                    font-size: 18px;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                }
+
+                button:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 8px rgba(0,0,0,0.2);
+                }
+
+                button:active {
+                    transform: translateY(0);
+                }
+            `}</style>
         </div>
-        <div>
-          <label className="block mb-1">Owner Name:</label>
-          <input
-            type="text"
-            name="owner_name"
-            value={foodItem.owner_name}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Hotel Address:</label>
-          <input
-            type="text"
-            name="hotel_address"
-            value={foodItem.hotel_address}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Hotel Email:</label>
-          <input
-            type="email"
-            name="hotel_email"
-            value={foodItem.hotel_email}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Hotel Number:</label>
-          <input
-            type="tel"
-            name="hotel_number"
-            value={foodItem.hotel_number}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Food Menu:</label>
-          <input
-            type="text"
-            name="food_menu"
-            value={foodItem.food_menu}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-        >
-          Submit
-        </button>
-      </form>
-    </div>
-  );
+    );
 };
 
 export default OwnerHome;

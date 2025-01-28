@@ -438,7 +438,7 @@ def owner_login(request):
             return JsonResponse({'error': str(e)}, status=500)
         
 @csrf_exempt
-def owner_home(request):
+def owner_add(request):
     if request.method=='POST':
         try:
             data=json.loads(request.body.decode('utf-8'))
