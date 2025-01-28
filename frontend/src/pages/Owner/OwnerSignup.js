@@ -4,10 +4,12 @@ import { useNavigate } from 'react-router-dom';
 
 const OwnerSignup = () => {
     const [formData, setFormData] = useState({
+
         email: '',
         phonenumber: '',
         password: '',
         otp: '',
+        role:'Owner'
 
     });
     const [emailVerified, setEmailVerified] = useState(false);
@@ -32,7 +34,6 @@ const OwnerSignup = () => {
             [name]: value
         }));
 
-        // Real-time password validation
         if (name === 'password') {
             if (!validatePassword(value)) {
                 setPasswordError('Password must be 6 characters with lowercase, uppercase, and numbers');
@@ -41,7 +42,6 @@ const OwnerSignup = () => {
             }
         }
 
-        // Real-time phone number validation
         if (name === 'phonenumber') {
             if (!validatePhoneNumber(value)) {
                 setPhoneError('Phone number must be exactly 10 digits');

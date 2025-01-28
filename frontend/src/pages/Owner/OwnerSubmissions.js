@@ -22,25 +22,8 @@ const OwnerSubmissions = () => {
     fetchSubmissions();
   }, []);
 
-  const handleRedirect = (status) => {
-    if (status === "accepted") {
-      window.location.href = "/ownermenu";
-    } else {
-      window.location.href = "/owneradd";
-    }
-  };
-
-  const handleReject = async (submissionId) => {
-    try {
-      await axios.post(`http://localhost:8000/ownersubmissions/reject/${submissionId}`);
-      setSubmissions((prevSubmissions) =>
-        prevSubmissions.map((submission) =>
-          submission._id === submissionId ? { ...submission, status: "rejected" } : submission
-        )
-      );
-    } catch (err) {
-      console.error("Failed to reject submission:", err);
-    }
+  const handleRedirect = () => {
+    window.location.href = "/ownermenu";
   };
 
   if (loading) {
@@ -108,43 +91,24 @@ const OwnerSubmissions = () => {
                         color: 
                           submission.status === "accepted"
                             ? "#2f855a"
-                            : submission.status === "rejected"
-                            ? "#e53e3e"
                             : "#d69e2e",
                         backgroundColor: 
                           submission.status === "accepted"
                             ? "#f0fff4"
-                            : submission.status === "rejected"
-                            ? "#fff5f5"
                             : "#fefcbf",
                       }}
                     >
-                      {submission.status === "in_review" ? "In Review" : submission.status === "accepted" ? "Accepted" : "Rejected"}
+                      {submission.status === "accepted" ? "Accepted" : "In Review"}
                     </span>
                   </td>
                   <td style={{ ...cellStyle, textAlign: "center" }}>
-                    {submission.status === "accepted" ? (
+                    {submission.status === "accepted" && (
                       <button
-                        onClick={() => handleRedirect("accepted")}
+                        onClick={handleRedirect}
                         style={buttonStyle("#2f855a", "#f0fff4")}
                       >
                         Go to menu
                       </button>
-                    ) : (
-                      <>
-                        <button
-                          onClick={() => handleRedirect(submission.status)}
-                          style={buttonStyle("#d69e2e", "#fefcbf")}
-                        >
-                          Resubmit
-                        </button>
-                        <button
-                          onClick={() => handleReject(submission._id)}
-                          style={buttonStyle("#e53e3e", "#fff5f5")}
-                        >
-                          Reject
-                        </button>
-                      </>
                     )}
                   </td>
                 </tr>

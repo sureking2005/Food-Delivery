@@ -9,7 +9,7 @@ const UserSignup = () => {
         phonenumber: '',
         password: '',
         otp: '',
-        role:''
+        role:'Customer'
 
     });
     const [emailVerified, setEmailVerified] = useState(false);

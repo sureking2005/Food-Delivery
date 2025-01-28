@@ -11,7 +11,8 @@ const OwnerAdd = () => {
     hotel_email: '',
     hotel_number: '',
     food_menu: '',
-    status: 'in_review'
+    status: 'in_review',
+    Role:'Owner'
   });
 
   const handleChange = (e) => {

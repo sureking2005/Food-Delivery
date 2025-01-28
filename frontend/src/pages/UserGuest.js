@@ -20,9 +20,9 @@ const GuestUserHome = () => {
     navigate('/deliveryboylogin');
   };
 
-  const handleAdminLogin = () => {
-    navigate('/adminlogin');
-  };
+  // const handleAdminLogin = () => {
+  //   navigate('/adminlogin');
+  // };
 
   const handleOwnerLogin = () => {
     navigate('/ownerlogin');
@@ -33,7 +33,7 @@ const GuestUserHome = () => {
     <div>
       <nav>
         <button onClick={() => navigate('/')}>Home</button>
-        <button onClick={handleAdminLogin}>Admin Login</button>
+        {/* <button onClick={handleAdminLogin}>Admin Login</button> */}
         <button onClick={handleOwnerLogin}>Owner Login/Signup</button>
         <button onClick={handleUserLogin}>Customer Login/Signup</button>
         <button onClick={handleDeliveryLogin}>Deliveryboy Login/Signup</button>

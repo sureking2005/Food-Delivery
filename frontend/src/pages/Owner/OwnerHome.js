@@ -45,11 +45,9 @@ const OwnerHome = () => {
                 <h1>Owner Dashboard</h1>
                 {error && <div className="error-message">{error}</div>}
                 <div className="button-container">
-                    {(!submissionStatus || submissionStatus === 'rejected') && (
-                        <button onClick={handleAddClick}>
-                            Add Submission
-                        </button>
-                    )}
+                    <button onClick={handleAddClick}>
+                        Add Submission
+                    </button>
                     <button onClick={handleSubmissionsClick}>
                         View Submissions
                     </button>

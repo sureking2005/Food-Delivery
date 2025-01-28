@@ -8,6 +8,7 @@ const AdminSignup = () => {
         phonenumber: '',
         password: '',
         otp: '',
+        role:'Admin'
 
     });
     const [emailVerified, setEmailVerified] = useState(false);
