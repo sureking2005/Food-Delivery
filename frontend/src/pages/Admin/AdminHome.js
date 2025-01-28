@@ -14,10 +14,10 @@ const AdminHome = () => {
           endpoint = 'adminhome';
           break;
         case 'users':
-          endpoint = 'adminusers';
+          endpoint = 'adminuser';
           break;
         case 'owners':
-          endpoint = 'adminowners';
+          endpoint = 'adminowner';
           break;
         case 'delivery':
           endpoint = 'admindelivery';

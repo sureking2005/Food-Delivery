@@ -182,7 +182,8 @@ def user_signup(request):
             user = db.users_signupdetail.insert_one({
                 'email': data['email'],
                 'phonenumber': data['phonenumber'],
-                'password':  hashed_password.decode('utf-8')
+                'password':  hashed_password.decode('utf-8'),
+                'role':data['role']
             })
 
             del otp_storage[data['email']]

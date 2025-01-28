@@ -8,6 +8,7 @@ const DeliveryboySignup = () => {
         phonenumber: '',
         password: '',
         otp: '',
+        role:'deliveryboy'
 
     });
     const [emailVerified, setEmailVerified] = useState(false);
@@ -40,7 +41,6 @@ const DeliveryboySignup = () => {
             }
         }
 
-        // Real-time phone number validation
         if (name === 'phonenumber') {
             if (!validatePhoneNumber(value)) {
                 setPhoneError('Phone number must be exactly 10 digits');

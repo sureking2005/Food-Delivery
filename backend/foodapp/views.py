@@ -162,7 +162,7 @@ def admin_signup(request):
             phonenumber = data.get('phonenumber')
 
             
-            Required_fields = ['email', 'phonenumber', 'password', 'otp']
+            Required_fields = ['email', 'phonenumber', 'password', 'otp','role']
             for field in Required_fields:
                 if field not in data:
                     return JsonResponse({'error': f'{field} is required'}, status=400)
@@ -186,7 +186,8 @@ def admin_signup(request):
             user = db.admin_signupdetail.insert_one({
                 'email': data['email'],
                 'phonenumber': data['phonenumber'],
-                'password':  hashed_password.decode('utf-8')
+                'password':  hashed_password.decode('utf-8'),
+                'role':data['role']
             })
 
             del otp_storage[data['email']]
