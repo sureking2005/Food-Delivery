@@ -4,10 +4,12 @@ import { useNavigate } from 'react-router-dom';
 
 const UserSignup = () => {
     const [formData, setFormData] = useState({
+        name:'',
         email: '',
         phonenumber: '',
         password: '',
         otp: '',
+        role:''
 
     });
     const [emailVerified, setEmailVerified] = useState(false);
@@ -32,7 +34,6 @@ const UserSignup = () => {
             [name]: value
         }));
 
-        // Real-time password validation
         if (name === 'password') {
             if (!validatePassword(value)) {
                 setPasswordError('Password must be 6 characters with lowercase, uppercase, and numbers');
@@ -41,7 +42,6 @@ const UserSignup = () => {
             }
         }
 
-        // Real-time phone number validation
         if (name === 'phonenumber') {
             if (!validatePhoneNumber(value)) {
                 setPhoneError('Phone number must be exactly 10 digits');
@@ -119,6 +119,14 @@ const UserSignup = () => {
             <h1>User Signup</h1>
             <form onSubmit={handleSubmit}>
                 <div>
+                <input
+                        type="name"
+                        name="name"
+                        placeholder="Enter Name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                    />
                     <input
                         type="email"
                         name="email"
