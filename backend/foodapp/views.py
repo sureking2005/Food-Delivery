@@ -669,6 +669,45 @@ def admin_login(request):
 
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
+        
+@csrf_exempt
+def admin_home(request):
+    if request.method=='GET':
+        try:    
+            details=list(db.owner_details.find())
+
+            processed=[]
+
+            for detail in details:
+                detail['_id']=str(detail['_id'])
+
+                processed.append(detail)
+
+            return JsonResponse(processed,safe=False)
+        except json.JSONDecodeError:
+            return JsonResponse({'error':'Invalid JSON'},status=400)    
+
+
+    return JsonResponse({'alert':'Invalid Request method'},status=405)
+
+
+@csrf_exempt
+def admin_home_update(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            
+            db.owner_details.update_one(
+                {'hotel_email': data['hotel_email']},  
+                {'$set': {'status': data['status']}}   
+            )
+            
+            return JsonResponse({'message': f'Status {data["status"]} successfully'})
+            
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    
+    return JsonResponse({'error': 'Invalid request method'}, status=405)   
 
         
 @csrf_exempt
