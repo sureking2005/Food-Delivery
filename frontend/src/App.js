@@ -1,7 +1,7 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import UserGuest from './pages/UserGuest';
+import UserGuest from './pages/GuestHome';
 import UserLogin from './pages/User/UserLogin';
 import UserSignup from './pages/User/UserSignup';
 import UserHome from './pages/User/UserHome';
@@ -32,6 +32,9 @@ import OwnerReset from './pages/Owner/OwnerReset';
 import OwnerSubmissions from './pages/Owner/OwnerSubmissions';
 import OwnerAdd from './pages/Owner/OwnerAdd';
 import OwnerMenu from './pages/Owner/OwnerMenu';
+
+import GuestHome from './pages/GuestHome';
+
 
 
 function App() {
@@ -70,6 +73,8 @@ function App() {
         <Route path="/ownersubmissions" element={<OwnerSubmissions/>}/>
         <Route path="/owneradd" element={<OwnerAdd/>}/>
         <Route path="/ownermenu" element={<OwnerMenu/>}/>
+
+        <Route path="/guesthome" element={<GuestHome/>}/>
 
       </Routes>
     </Router>

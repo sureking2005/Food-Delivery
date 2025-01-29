@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const OwnerSignup = () => {
     const [formData, setFormData] = useState({
-
+        name:'',
         email: '',
         phonenumber: '',
         password: '',
@@ -119,6 +119,14 @@ const OwnerSignup = () => {
             <h1>Owner Signup</h1>
             <form onSubmit={handleSubmit}>
                 <div>
+                <input
+                        type="name"
+                        name="name"
+                        placeholder="Enter Name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                    />
                     <input
                         type="email"
                         name="email"

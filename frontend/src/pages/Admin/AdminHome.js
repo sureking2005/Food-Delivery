@@ -149,7 +149,7 @@ const AdminHome = () => {
         {data && data.length > 0 ? (
           data.map((user, index) => (
             <tr key={index} style={{ borderBottom: '1px solid #ddd' }}>
-              <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.username || 'N/A'}</td>
+              <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.name || 'N/A'}</td>
               <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.email || 'N/A'}</td>
               <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.phonenumber || 'N/A'}</td>
               <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.Role || 'User'}</td>
@@ -175,7 +175,6 @@ const AdminHome = () => {
           <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Email</th>
           <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Phone</th>
           <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Status</th>
-          <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Role</th>
 
         </tr>
       </thead>
@@ -187,8 +186,6 @@ const AdminHome = () => {
             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.hotel_email}</td>
             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.hotel_number}</td>
             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.status}</td>
-            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.role}</td>
-
           </tr>
         ))}
       </tbody>
