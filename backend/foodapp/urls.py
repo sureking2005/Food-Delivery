@@ -19,10 +19,6 @@ urlpatterns=[
     path('placeorder/', user.user_order, name='user_order'), 
 
 
-
-
-
-
     path('deliveryboysignup/',deliveryboy.deliveryboy_signup,name='deliveryboy_signup'),
     path('deliveryboylogin/',deliveryboy.deliveryboy_login,name='deliveryboy_login'),
     path('deliveryboyreset/',deliveryboy.deliveryboy_reset,name='deliveryboy_reset'),
@@ -42,20 +38,17 @@ urlpatterns=[
     path('adminowner/',views.admin_owner,name='admin_owner'),
     # path('admindeliveryboy/',views.admin_deliveryboy,name='admin_deliveryboy'),
  
- 
-
-
-
-
     path('ownersignup/',owner.owner_signup,name='owner_signup'),
     path('ownerlogin/',owner.owner_login,name='owner_login'),
     path('ownerreset/',owner.owner_reset,name='owner_reset'),
     path('ownerverifyemail/',owner.owner_verify_email,name='owner_verify_email'),
     path('ownerverifyforgotemail/',owner.owner_verify_forgot_email,name='owner_verify_forgot_email'),
     path('ownerverifyotp/',owner.owner_verify_otp,name='owner_verify_otp'),
-    path('owneradd/',owner.owner_add,name='owner_add'),
-    path('ownersubmissions/',owner.owner_submissions,name='owner_submissions'),
+    # path('owneradd/',owner.owner_add,name='owner_add'),
+    # path('ownersubmissions/',owner.owner_submissions,name='owner_submissions'),
     path('ownermenu/',owner.owner_menu,name='owner_menu'),
+
+    path('guesthome/',user.user_home,name='user_home'),
 
 
 ]

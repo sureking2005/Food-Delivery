@@ -11,11 +11,11 @@ const OwnerHome = () => {
     useEffect(() => {
         const fetchSubmissionStatus = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/ownersubmissions/');
+                const response = await axios.get('http://localhost:8000/owner/');
                 if (response.data && response.data.length > 0) {
-                    setSubmissionStatus(response.data[0].status);
+                    setSubmissionStatus(response.data[0].status); 
                 } else {
-                    setSubmissionStatus('not_accepted'); 
+                    setSubmissionStatus('not_accepted');
                 }
                 setLoading(false);
             } catch (err) {
@@ -28,14 +28,6 @@ const OwnerHome = () => {
         fetchSubmissionStatus();
     }, []);
 
-    const handleAddClick = () => {
-        navigate('/owneradd');
-    };
-
-    const handleSubmissionsClick = () => {
-        navigate('/ownersubmissions');
-    };
-
     const handleMenuClick = () => {
         navigate('/ownermenu');
     };
@@ -46,16 +38,10 @@ const OwnerHome = () => {
                 <h1>Owner Dashboard</h1>
                 {error && <div className="error-message">{error}</div>}
                 <div className="button-container">
-                    <button onClick={handleAddClick}>
-                        Add Submission
-                    </button>
-                    <button onClick={handleSubmissionsClick}>
-                        View Submissions
-                    </button>
-                    {/* Show "Manage Menu" button only if status is 'accepted' */}
+                    
                     {submissionStatus === 'accepted' && (
                         <button onClick={handleMenuClick}>
-                            Manage Menu
+                            Add Menu
                         </button>
                     )}
                 </div>

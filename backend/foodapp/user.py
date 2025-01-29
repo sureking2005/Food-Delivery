@@ -409,7 +409,7 @@ def user_order(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body.decode('utf-8'))
-            user_id = data.get('userId')  # Assuming user ID is sent in the request
+            user_id = data.get('userId') 
             items = data.get('items', [])
             shipping_address = data.get('shippingAddress', '')
             total_amount = data.get('totalAmount', 0)
@@ -418,29 +418,29 @@ def user_order(request):
                 name = item.get('name', '')
                 ordered_quantity = int(item.get('quantity', 0))
 
-                # Find the current stock
+               
                 menu_item = db.owner_menu.find_one({'name': name})
                 if not menu_item:
                     return JsonResponse({'message': f'Item {name} not found in stock'}, status=404)
 
                 current_stock =int(menu_item.get('stock', 0))
 
-                # Ensure stock doesn't go negative
+                
                 if current_stock < ordered_quantity:
                     return JsonResponse({'message': f'Insufficient stock for {name}'}, status=400)
 
-                # Subtract the ordered quantity from the current stock
+               
                 new_stock = current_stock - ordered_quantity
 
                 result = db.owner_menu.update_one(
                     {'name': name},
-                    {'$set': {'stock': new_stock}}  # Fixed 'stocks' -> 'stock' if it's a typo
+                    {'$set': {'stock': new_stock}}  
                 )
 
                 if result.modified_count == 0:
                     return JsonResponse({'message': f'Failed to update stock for {name}'}, status=500)
 
-            # Save the order
+            
             order_data = {
                 'userId': user_id,
                 'items': items,
@@ -449,7 +449,7 @@ def user_order(request):
             }
             result = db.user_orders.insert_one(order_data)
 
-            # Clear the user's cart after successful order placement
+           
             db.user_carts.delete_many({'userId': user_id})
 
             return JsonResponse({'message': 'Order placed successfully!', 'order_id': str(result.inserted_id)}, status=200)

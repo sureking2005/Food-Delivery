@@ -1,32 +1,42 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'; 
+import axios from 'axios';
 
 const OwnerLogin = () => {
     const [primary_key, setPrimary_key] = useState('');
-
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        setError(''); 
+        setError('');
+        setMessage('');
 
         try {
             const response = await axios.post('http://localhost:8000/ownerlogin/', {
-                primary_key: primary_key ,
+                primary_key: primary_key,
                 password: password
             });
 
             if (response.status === 200) {
-                console.log('Login successful', response.data);
-                alert('Login Successful');
-                navigate('/ownerhome');
+                if (response.data.status === "inreview") {
+                    setMessage('Your registration is in progress. Please wait for admin approval.');
+                } else if (response.data.status === "rejected") {
+                    setError('Your registration has been rejected.');
+                } else if (response.data.status === "accepted") {
+                    alert('Login Successful');
+                    navigate('/ownerhome');
+                }
             }
         } catch (err) {
             if (err.response) {
-                setError(err.response.data.error || 'Login failed');
+                if (err.response.status === 403) {
+                    setError('Account locked. Try again later.');
+                } else {
+                    setError(err.response.data.error || 'Login failed');
+                }
             } else if (err.request) {
                 setError('No response from server');
             } else {
@@ -47,40 +57,49 @@ const OwnerLogin = () => {
     return (
         <div className='ownerlogin'>
             <div className='login-card'>
-            <h1>Owner Login</h1>
-            {error && <div className="error-message text-red-500">{error}</div>}
-            <form onSubmit={handleLogin}>
-                <div className='login-column'>
-                    <input 
-                        type="text" 
-                        placeholder="Enter Email/Phone Number" 
-                        value={primary_key}
-                        onChange={(e) => setPrimary_key(e.target.value)}
-                        required 
-                    />
-                    <input 
-                        type="password" 
-                        placeholder="Enter Password" 
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required 
-                    />
-                    <button type="submit">Login</button>
+                <h1>Owner Login</h1>
+                {error && <div className="error-message text-red-500 mb-4">{error}</div>}
+                {message && <div className="info-message text-blue-500 mb-4">{message}</div>}
+                <form onSubmit={handleLogin}>
+                    <div className='login-column'>
+                        <input 
+                            type="text" 
+                            placeholder="Enter Email/Phone Number" 
+                            value={primary_key}
+                            onChange={(e) => setPrimary_key(e.target.value)}
+                            required 
+                        />
+                        <input 
+                            type="password" 
+                            placeholder="Enter Password" 
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required 
+                        />
+                        <button type="submit">Login</button>
+                    </div>
+                </form>
+                <div className='signup-link'>
+                    <p>Don't have an account? 
+                        <button onClick={handleSignup}>Sign Up</button>
+                    </p>
                 </div>
-                
-            </form>
-            <div className='signup-link'>
-                <p>Don't have an account? 
-                    <button onClick={handleSignup}>Sign Up</button>
-                </p>
-            </div>
-            <div className='forgot-link'>
-                <p>Forgot your password? 
-                    <button onClick={handleforgot}>Forgot password</button>
-                </p>
-            </div>
+                <div className='forgot-link'>
+                    <p>Forgot your password? 
+                        <button onClick={handleforgot}>Forgot password</button>
+                    </p>
+                </div>
             </div>
             <style>{`
+                /* Your existing styles remain the same */
+                .info-message {
+                    background-color: #e3f2fd;
+                    padding: 10px;
+                    border-radius: 5px;
+                    margin-bottom: 20px;
+                }
+                
+                /* Rest of your existing styles */
                 .ownerlogin {
                     display: flex;
                     justify-content: center;
