@@ -86,6 +86,8 @@ const AdminHome = () => {
           <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Email</th>
           <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Number</th>
           <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Status</th>
+          <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Role</th>
+
         </tr>
       </thead>
       <tbody>
@@ -97,6 +99,8 @@ const AdminHome = () => {
             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{hotel.email}</td>
             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{hotel.phonenumber}</td>
             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{hotel.status}</td>
+            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{hotel.role}</td>
+
               {hotel.status === 'in_review' && (
                 <>
                   <button 
@@ -164,31 +168,6 @@ const AdminHome = () => {
     </table>
   );
 
-  const renderOwnersTable = () => (
-    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-      <thead>
-        <tr style={{ backgroundColor: '#f3f4f6' }}>
-          <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Owner Name</th>
-          <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Hotel Name</th>
-          <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Email</th>
-          <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Phone</th>
-          <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Status</th>
-
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((owner, index) => (
-          <tr key={index} style={{ borderBottom: '1px solid #ddd' }}>
-            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.hotel_name}</td>
-            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.name}</td>
-            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.email}</td>
-            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.phonenumber}</td>
-            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.status}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
 
   const renderDeliveryTable = () => (
     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -219,8 +198,6 @@ const AdminHome = () => {
         return renderHotelsTable();
       case 'users':
         return renderUsersTable();
-      case 'owners':
-        return renderOwnersTable();
       case 'delivery':
         return renderDeliveryTable();
       default:
@@ -243,19 +220,13 @@ const AdminHome = () => {
           style={activeView === 'users' ? activeButtonStyle : buttonStyle}
           onClick={() => setActiveView('users')}
         >
-          User Details
-        </button>
-        <button 
-          style={activeView === 'owners' ? activeButtonStyle : buttonStyle}
-          onClick={() => setActiveView('owners')}
-        >
-          Owner Details
+          User Registrations
         </button>
         <button 
           style={activeView === 'delivery' ? activeButtonStyle : buttonStyle}
           onClick={() => setActiveView('delivery')}
         >
-          Delivery Boy Details
+          Delivery Person Registrations
         </button>
       </div>
       <div style={{ padding: '20px' }}>
