@@ -248,7 +248,7 @@ def admin_login(request):
 def admin_home(request):
     if request.method=='GET':
         try:    
-            details=list(db.owner_details.find())
+            details=list(db.owner_signupdetail.find())
 
             processed=[]
 
@@ -271,8 +271,8 @@ def admin_home_update(request):
         try:
             data = json.loads(request.body.decode('utf-8'))
             
-            db.owner_details.update_one(
-                {'hotel_email': data['hotel_email']},  
+            db.owner_signupdetail.update_one(
+                {'email': data['email']},  
                 {'$set': {'status': data['status']}}   
             )
             

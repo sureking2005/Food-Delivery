@@ -5,11 +5,15 @@ import { useNavigate } from 'react-router-dom';
 const OwnerSignup = () => {
     const [formData, setFormData] = useState({
         name:'',
+        hotel_name:'',
         email: '',
         phonenumber: '',
+        address:'',
+        menu:'',
         password: '',
         otp: '',
-        role:'Owner'
+        role:'Owner',
+        status:'in_review'
 
     });
     const [emailVerified, setEmailVerified] = useState(false);
@@ -100,7 +104,7 @@ const OwnerSignup = () => {
     
             if (response.data.message === 'Signup Successful') {
                 alert('Signup Successful');
-                navigate('/ownerhome');
+                navigate('/ownerlogin');
             }
         } catch (error) {
             console.error('Signup error:', error.response ? error.response.data : error.message);
@@ -122,8 +126,16 @@ const OwnerSignup = () => {
                 <input
                         type="name"
                         name="name"
-                        placeholder="Enter Name"
+                        placeholder="Enter Restaurant owner Name"
                         value={formData.name}
+                        onChange={handleChange}
+                        required
+                    />
+                    <input
+                        type="name"
+                        name="hotel_name"
+                        placeholder="Enter Restaurant Name"
+                        value={formData.hotel_name}
                         onChange={handleChange}
                         required
                     />
@@ -159,6 +171,14 @@ const OwnerSignup = () => {
                         required
                     />
                     {phoneError && <p style={{color: 'red'}}>{phoneError}</p>}
+                    <input
+                        type="text"
+                        name="address"
+                        placeholder="Enter Restaurant Address"
+                        value={formData.address}
+                        onChange={handleChange}
+                        required
+                    />
 
                     <input
                         type="password"

@@ -41,10 +41,10 @@ const AdminHome = () => {
     fetchData();
   }, [fetchData]); 
 
-  const handleStatusUpdate = async (hotelEmail, newStatus) => {
+  const handleStatusUpdate = async (email, newStatus) => {
     try {
       await axios.post(`http://localhost:8000/adminhomeupdate/`, {
-        hotel_email: hotelEmail,
+        email: email,
         status: newStatus
       });
       fetchData();
@@ -85,7 +85,6 @@ const AdminHome = () => {
           <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Address</th>
           <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Email</th>
           <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Number</th>
-          <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Menu</th>
           <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Status</th>
         </tr>
       </thead>
@@ -93,16 +92,15 @@ const AdminHome = () => {
         {data.map((hotel, index) => (
           <tr key={index} style={{ borderBottom: '1px solid #ddd' }}>
             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{hotel.hotel_name}</td>
-            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{hotel.owner_name}</td>
-            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{hotel.hotel_address}</td>
-            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{hotel.hotel_email}</td>
-            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{hotel.hotel_number}</td>
-            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{hotel.food_menu}</td>
+            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{hotel.name}</td>
+            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{hotel.address}</td>
+            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{hotel.email}</td>
+            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{hotel.phonenumber}</td>
             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{hotel.status}</td>
               {hotel.status === 'in_review' && (
                 <>
                   <button 
-                    onClick={() => handleStatusUpdate(hotel.hotel_email, 'accepted')}
+                    onClick={() => handleStatusUpdate(hotel.email, 'accepted')}
                     style={{ 
                       marginRight: '10px',
                       padding: '5px 10px',
@@ -115,7 +113,7 @@ const AdminHome = () => {
                     Accept
                   </button>
                   <button 
-                    onClick={() => handleStatusUpdate(hotel.hotel_email, 'rejected')}
+                    onClick={() => handleStatusUpdate(hotel.email, 'rejected')}
                     style={{ 
                       padding: '5px 10px',
                       backgroundColor: '#f44336',
@@ -181,10 +179,10 @@ const AdminHome = () => {
       <tbody>
         {data.map((owner, index) => (
           <tr key={index} style={{ borderBottom: '1px solid #ddd' }}>
-            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.owner_name}</td>
             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.hotel_name}</td>
-            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.hotel_email}</td>
-            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.hotel_number}</td>
+            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.name}</td>
+            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.email}</td>
+            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.phonenumber}</td>
             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{owner.status}</td>
           </tr>
         ))}

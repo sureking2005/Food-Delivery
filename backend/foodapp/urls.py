@@ -44,8 +44,8 @@ urlpatterns=[
     path('ownerverifyemail/',owner.owner_verify_email,name='owner_verify_email'),
     path('ownerverifyforgotemail/',owner.owner_verify_forgot_email,name='owner_verify_forgot_email'),
     path('ownerverifyotp/',owner.owner_verify_otp,name='owner_verify_otp'),
-    path('owneradd/',owner.owner_add,name='owner_add'),
-    path('ownersubmissions/',owner.owner_submissions,name='owner_submissions'),
+    # path('owneradd/',owner.owner_add,name='owner_add'),
+    # path('ownersubmissions/',owner.owner_submissions,name='owner_submissions'),
     path('ownermenu/',owner.owner_menu,name='owner_menu'),
 
     path('guesthome/',user.user_home,name='user_home'),

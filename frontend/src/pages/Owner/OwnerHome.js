@@ -12,9 +12,10 @@ const OwnerHome = () => {
         const fetchSubmissionStatus = async () => {
             try {
                 const response = await axios.get('http://localhost:8000/ownersubmissions/');
-                // Assuming the API returns the latest submission
                 if (response.data && response.data.length > 0) {
-                    setSubmissionStatus(response.data[0].status);
+                    setSubmissionStatus(response.data[0].status); // Set the status from the API response
+                } else {
+                    setSubmissionStatus('not_accepted'); // Default status for new owners
                 }
                 setLoading(false);
             } catch (err) {
@@ -51,18 +52,12 @@ const OwnerHome = () => {
                     <button onClick={handleSubmissionsClick}>
                         View Submissions
                     </button>
-                    <button 
-                        onClick={handleMenuClick}
-                        disabled={submissionStatus !== 'accepted'}
-                        className={submissionStatus !== 'accepted' ? 'disabled' : ''}
-                    >
-                        Manage Menu
-                        {submissionStatus !== 'accepted' && (
-                            <div className="button-tooltip">
-                                Your submission must be accepted to manage menu
-                            </div>
-                        )}
-                    </button>
+                    {/* Show "Manage Menu" button only if status is 'accepted' */}
+                    {submissionStatus === 'accepted' && (
+                        <button onClick={handleMenuClick}>
+                            Manage Menu
+                        </button>
+                    )}
                 </div>
                 {loading && <div className="loading">Loading...</div>}
             </div>
@@ -120,37 +115,6 @@ const OwnerHome = () => {
 
                 button:active {
                     transform: translateY(0);
-                }
-
-                button.disabled {
-                    background: linear-gradient(to right, #9ca3af, #6b7280);
-                    cursor: not-allowed;
-                    opacity: 0.7;
-                }
-
-                button.disabled:hover {
-                    transform: none;
-                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                }
-
-                .button-tooltip {
-                    position: absolute;
-                    bottom: -40px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    background-color: #333;
-                    color: white;
-                    padding: 8px 12px;
-                    border-radius: 4px;
-                    font-size: 14px;
-                    white-space: nowrap;
-                    opacity: 0;
-                    pointer-events: none;
-                    transition: opacity 0.3s ease;
-                }
-
-                button:hover .button-tooltip {
-                    opacity: 1;
                 }
 
                 .error-message {
