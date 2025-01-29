@@ -13,9 +13,9 @@ const OwnerHome = () => {
             try {
                 const response = await axios.get('http://localhost:8000/ownersubmissions/');
                 if (response.data && response.data.length > 0) {
-                    setSubmissionStatus(response.data[0].status); // Set the status from the API response
+                    setSubmissionStatus(response.data[0].status);
                 } else {
-                    setSubmissionStatus('not_accepted'); // Default status for new owners
+                    setSubmissionStatus('not_accepted'); 
                 }
                 setLoading(false);
             } catch (err) {

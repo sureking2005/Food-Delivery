@@ -1,14 +1,14 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import UserGuest from './pages/UserGuest';
+import UserGuest from './pages/GuestHome';
 import UserLogin from './pages/User/UserLogin';
 import UserSignup from './pages/User/UserSignup';
 import UserHome from './pages/User/UserHome';
 import UserForgot from './pages/User/UserForgot';
 import UserReset from './pages/User/UserReset';
 import UserCart from './pages/User/UserCart';
-import UserOrder from './pages/User/Userorder';
+import UserOrder from './pages/User/UserOrder';
 
 
 import AdminLogin from './pages/Admin/AdminLogin';
