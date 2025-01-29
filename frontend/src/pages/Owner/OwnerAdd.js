@@ -14,7 +14,7 @@ const OwnerAdd = () => {
     status: 'in_review',
     Role: 'Owner'
   });
-    
+
   const [phoneError, setPhoneError] = useState('');
 
   const validatePhoneNumber = (phone) => {
@@ -24,14 +24,11 @@ const OwnerAdd = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
+
     if (name === 'hotel_number') {
-      
       const numericValue = value.replace(/[^\d]/g, '');
-      
-      
       const truncatedValue = numericValue.slice(0, 10);
-      
+
       if (!validatePhoneNumber(truncatedValue) && truncatedValue.length > 0) {
         setPhoneError('Phone number must be exactly 10 digits');
       } else {
@@ -52,7 +49,7 @@ const OwnerAdd = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validatePhoneNumber(foodItem.hotel_number)) {
       setPhoneError('Phone number must be exactly 10 digits');
       return;
@@ -80,96 +77,198 @@ const OwnerAdd = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Submit Hotel</h1>
-        <button
-          onClick={() => navigate('/ownersubmissions')}
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
-        >
-          View Submissions
-        </button>
+    <div className="owner-home">
+      <div className="home-card">
+        <h1>Submit Hotel</h1>
+        <form onSubmit={handleSubmit} className="form-container">
+          <div className="form-group">
+            <label>Hotel Name:</label>
+            <input
+              type="text"
+              name="hotel_name"
+              value={foodItem.hotel_name}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Owner Name:</label>
+            <input
+              type="text"
+              name="owner_name"
+              value={foodItem.owner_name}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Hotel Address:</label>
+            <input
+              type="text"
+              name="hotel_address"
+              value={foodItem.hotel_address}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Hotel Email:</label>
+            <input
+              type="email"
+              name="hotel_email"
+              value={foodItem.hotel_email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Hotel Number:</label>
+            <input
+              type="tel"
+              name="hotel_number"
+              value={foodItem.hotel_number}
+              onChange={handleChange}
+              required
+              placeholder="Enter 10 digit number"
+            />
+            {phoneError && <span className="error-message">{phoneError}</span>}
+          </div>
+          <div className="form-group">
+            <label>Food Menu:</label>
+            <input
+              type="text"
+              name="food_menu"
+              value={foodItem.food_menu}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="button-group">
+            <button
+              type="submit"
+              className="submit-button"
+              disabled={phoneError !== ''}
+            >
+              Submit
+            </button>
+            <button
+              type="button"
+              className="view-submissions-button"
+              onClick={() => navigate('/ownersubmissions')}
+            >
+              View Submissions
+            </button>
+          </div>
+        </form>
       </div>
-      
-      <form onSubmit={handleSubmit} className="max-w-lg space-y-4">
-        <div>
-          <label className="block mb-1">Hotel Name:</label>
-          <input
-            type="text"
-            name="hotel_name"
-            value={foodItem.hotel_name}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Owner Name:</label>
-          <input
-            type="text"
-            name="owner_name"
-            value={foodItem.owner_name}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Hotel Address:</label>
-          <input
-            type="text"
-            name="hotel_address"
-            value={foodItem.hotel_address}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Hotel Email:</label>
-          <input
-            type="email"
-            name="hotel_email"
-            value={foodItem.hotel_email}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <div>
-          <label className="block mb-1">Hotel Number:</label>
-          <input
-            type="tel"
-            name="hotel_number"
-            value={foodItem.hotel_number}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded"
-            placeholder="Enter 10 digit number"
-          />
-          {phoneError && (
-            <span className="text-red-500 text-sm mt-1">{phoneError}</span>
-          )}
-        </div>
-        <div>
-          <label className="block mb-1">Food Menu:</label>
-          <input
-            type="text"
-            name="food_menu"
-            value={foodItem.food_menu}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-          disabled={phoneError !== ''}
-        >
-          Submit
-        </button>
-      </form>
+
+      <style>{`
+        .owner-home {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          font-family: 'Arial', sans-serif;
+        }
+
+        .home-card {
+          background: white;
+          border-radius: 15px;
+          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+          padding: 30px;
+          width: 450px;
+          text-align: center;
+        }
+
+        h1 {
+          color: #333;
+          margin-bottom: 30px;
+          font-size: 28px;
+        }
+
+        .form-container {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        }
+
+        .form-group {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          text-align: left;
+        }
+
+        .form-group label {
+          font-size: 14px;
+          color: #555;
+        }
+
+        .form-group input {
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 8px;
+          font-size: 14px;
+          outline: none;
+          transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+          border-color: #667eea;
+        }
+
+        .error-message {
+          color: #ef4444;
+          font-size: 12px;
+          margin-top: 4px;
+        }
+
+        .button-group {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          margin-top: 20px;
+        }
+
+        .submit-button,
+        .view-submissions-button {
+          padding: 10px;
+          border: none;
+          border-radius: 8px;
+          font-size: 14px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .submit-button {
+          background: linear-gradient(to right, #667eea, #764ba2);
+          color: white;
+        }
+
+        .submit-button:disabled {
+          background: linear-gradient(to right, #9ca3af, #6b7280);
+          cursor: not-allowed;
+          opacity: 0.7;
+        }
+
+        .view-submissions-button {
+          background: #10b981;
+          color: white;
+        }
+
+        .submit-button:hover:not(:disabled),
+        .view-submissions-button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-button:active:not(:disabled),
+        .view-submissions-button:active {
+          transform: translateY(0);
+        }
+      `}</style>
     </div>
   );
 };

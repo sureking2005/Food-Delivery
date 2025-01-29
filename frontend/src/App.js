@@ -8,7 +8,7 @@ import UserHome from './pages/User/UserHome';
 import UserForgot from './pages/User/UserForgot';
 import UserReset from './pages/User/UserReset';
 import UserCart from './pages/User/UserCart';
-import UserOrder from './pages/User/UserOrder';
+import UserOrder from './pages/User/Userorder';
 
 
 import AdminLogin from './pages/Admin/AdminLogin';
