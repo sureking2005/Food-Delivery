@@ -10,6 +10,7 @@ from email.mime.text import MIMEText
 import random
 import bcrypt
 from datetime import datetime, timedelta
+from bson import ObjectId 
 
 
 client=MongoClient('mongodb+srv://kavinkavin8466:1234@fooddelivery.i05g3.mongodb.net/?retryWrites=true&w=majority&appName=fooddelivery')
@@ -360,3 +361,95 @@ def owner_menu(request):
             return JsonResponse({'message':'Invalid JSON'},status=400)
         
     return JsonResponse({'message':'Invalid Request method'},status=405) 
+
+@csrf_exempt
+def delete_food(request, food_id):
+
+    if request.method == 'DELETE':
+        try:
+            
+            object_id = ObjectId(food_id)
+            
+        
+            result = db.owner_menu.delete_one({'_id': object_id})
+            
+            if result.deleted_count > 0:
+                return JsonResponse({
+                    'message': 'Food item deleted successfully'
+                }, status=200)
+            else:
+                return JsonResponse({
+                    'message': 'Food item not found'
+                }, status=404)
+                
+        except Exception as e:
+            return JsonResponse({
+                'message': f'Error deleting food item: {str(e)}'
+            }, status=500)
+    
+    return JsonResponse({
+        'message': 'Invalid request method'
+    }, status=405)
+
+@csrf_exempt
+def update_food(request, food_id):
+    if request.method == 'PUT':
+        try:
+           
+            object_id = ObjectId(food_id)
+            
+        
+            existing_food = db.owner_menu.find_one({'_id': object_id})
+            
+            if not existing_food:
+                return JsonResponse({
+                    'message': 'Food item not found'
+                }, status=404)
+            
+            
+            update_data = {
+                'name': request.POST.get('name', existing_food['name']),
+                'price': request.POST.get('price', existing_food['price']),
+                'stock': int(request.POST.get('stock', existing_food['stock'])),  # Convert to integer
+            }
+            
+           
+            if 'image' in request.FILES:
+                image = request.FILES['image']
+             
+                image_binary = image.read()
+                update_data['image'] = {
+                    'filename': image.name,
+                    'content': image_binary,
+                    'content_type': image.content_type
+                }
+           
+            result = db.owner_menu.update_one(
+                {'_id': object_id},
+                {'$set': update_data}
+            )
+            
+            if result.modified_count > 0:
+                return JsonResponse({
+                    'message': 'Food item updated successfully',
+                    'updated_data': {
+                        'name': update_data['name'],
+                        'price': update_data['price'],
+                        'stock': update_data['stock']
+                    }
+                }, status=200)
+            else:
+                return JsonResponse({
+                    'message': 'No changes were made to the food item',
+                    'reason': 'Data might be the same as existing data'
+                }, status=200)
+                
+        except Exception as e:
+            print(f"Error updating food: {str(e)}") 
+            return JsonResponse({
+                'message': f'Error updating food item: {str(e)}'
+            }, status=500)
+    
+    return JsonResponse({
+        'message': 'Invalid request method'
+    }, status=405)

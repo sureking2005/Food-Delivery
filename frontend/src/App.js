@@ -32,6 +32,8 @@ import OwnerReset from './pages/Owner/OwnerReset';
 // import OwnerSubmissions from './pages/Owner/OwnerSubmissions';
 // import OwnerAdd from './pages/Owner/OwnerAdd';
 import OwnerMenu from './pages/Owner/OwnerMenu';
+import OwnerUpdate from './pages/Owner/OwnerUpdate';
+
 
 import GuestHome from './pages/GuestHome';
 
@@ -73,6 +75,7 @@ function App() {
         {/* <Route path="/ownersubmissions" element={<OwnerSubmissions/>}/>
         <Route path="/owneradd" element={<OwnerAdd/>}/> */}
         <Route path="/ownermenu" element={<OwnerMenu/>}/>
+        <Route path="/ownerupdate" element={<OwnerUpdate/>}/> 
 
         <Route path="/guesthome" element={<GuestHome/>}/>
 

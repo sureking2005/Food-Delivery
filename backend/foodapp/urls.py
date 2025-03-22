@@ -35,7 +35,7 @@ urlpatterns=[
     path('adminhome/',views.admin_home,name='admin_home'),
     path('adminhomeupdate/',views.admin_home_update,name='admin_home_update'),
     path('adminuser/',views.admin_user,name='admin_user'),
-    path('adminowner/',views.admin_owner,name='admin_owner'),
+    path('admindeliveryboy/',views.admin_deliveryboy,name='admin_deliveryboy'),
     # path('admindeliveryboy/',views.admin_deliveryboy,name='admin_deliveryboy'),
  
     path('ownersignup/',owner.owner_signup,name='owner_signup'),
@@ -47,6 +47,8 @@ urlpatterns=[
     # path('owneradd/',owner.owner_add,name='owner_add'),
     # path('ownersubmissions/',owner.owner_submissions,name='owner_submissions'),
     path('ownermenu/',owner.owner_menu,name='owner_menu'),
+    path('updatefood/<str:food_id>/', owner.update_food, name='update_food'),
+    path('deletefood/<str:food_id>/', owner.delete_food, name='delete_food'),
 
     path('guesthome/',user.user_home,name='user_home'),
 

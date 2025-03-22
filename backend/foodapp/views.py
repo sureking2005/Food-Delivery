@@ -305,11 +305,11 @@ def admin_user(request):
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 @csrf_exempt
-def admin_owner(request):
+def admin_deliveryboy(request):
     if request.method == 'GET':
         try:
     
-            details = list(db.owner_details.find({}, {'_id': 0}))  
+            details = list(db.deliveryboy_detail.find({}, {'_id': 0}))  
            
             processed_details = []
             for detail in details:
